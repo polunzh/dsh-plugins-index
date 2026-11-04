@@ -1,0 +1,114 @@
+{
+  "format": 1,
+  "title": {
+    "en": "polunzh DSH Plugins",
+    "zh": "polunzh 的 DSH 插件"
+  },
+  "description": {
+    "en": "Self-hosted plugin index for DeepSeek Harness (DSH). Add it once in Discover to browse, install and track updates.",
+    "zh": "DeepSeek Harness（DSH）自建插件索引。在「发现」里添加一次，即可浏览、安装并跟踪更新。"
+  },
+  "metadata": {
+    "categories": {
+      "interface": {
+        "title": {
+          "en": "Interface",
+          "zh": "界面"
+        }
+      },
+      "tools": {
+        "title": {
+          "en": "Tools",
+          "zh": "工具"
+        }
+      },
+      "workflow": {
+        "title": {
+          "en": "Workflow",
+          "zh": "工作流"
+        }
+      }
+    },
+    "labels": {
+      "macos": {
+        "title": {
+          "en": "macOS",
+          "zh": "macOS"
+        }
+      },
+      "bilingual": {
+        "title": {
+          "en": "Bilingual",
+          "zh": "中英双语"
+        }
+      },
+      "local-only": {
+        "title": {
+          "en": "Local only",
+          "zh": "纯本地"
+        }
+      }
+    },
+    "sortKeys": {
+      "added": {
+        "title": {
+          "en": "Added",
+          "zh": "收录时间"
+        },
+        "order": "desc"
+      }
+    }
+  },
+  "plugins": [
+    {
+      "name": "@polunzh/dsh-task-notifier",
+      "title": {
+        "en": "Task Notifier",
+        "zh": "任务通知台"
+      },
+      "description": {
+        "en": "Chime + system/browser notification when a task finishes, plus a Tasks sidebar panel filtering unread / running / completed sessions; unread state persists locally.",
+        "zh": "任务完成时响提示音并弹系统/浏览器通知；侧边栏「任务」面板可筛选已完成未读 / 运行中 / 已完成 / 全部，未读状态本地持久化。"
+      },
+      "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPCEtLSDpk4Ppk5vvvJrku7vliqHlrozmiJDnmoTpgJrnn6XmhJ/vvJvnlKjnuq/ok53ooajovr7jgIzku7vliqHpnaLmnb/jgI3ov5nkuKrlhaXlj6MgLS0+CiAgPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMjYiIGZpbGw9IiMyNDdiYmYiLz4KICA8cGF0aCBkPSJNMzIgMTdhMTEgMTEgMCAwIDEgMTEgMTF2Ni40YzAgMS42LjYgMy4xIDEuNyA0LjNsMi4xIDIuM2MuNy44LjEgMi0xIDJIMjAuMmMtMS4xIDAtMS43LTEuMi0xLTJsMi4xLTIuM2E2LjMgNi4zIDAgMCAwIDEuNy00LjNWMjhhMTEgMTEgMCAwIDEgMTEtMTFaIiBmaWxsPSIjZmZmZmZmIi8+CiAgPHBhdGggZD0iTTI3IDQ1aDEwYTUgNSAwIDAgMS0xMCAwWiIgZmlsbD0iI2ZmZmZmZiIvPgo8L3N2Zz4K",
+      "author": "polunzh",
+      "homepage": "https://github.com/polunzh/dsh-task-notifier#readme",
+      "repository": {
+        "url": "https://github.com/polunzh/dsh-task-notifier"
+      },
+      "metadata": {
+        "category": "interface",
+        "keywords": [
+          "notification",
+          "task",
+          "unread",
+          "chime",
+          "sidebar",
+          "macos",
+          "todo"
+        ],
+        "labels": [
+          "macos",
+          "bilingual",
+          "local-only"
+        ],
+        "sortKeys": {
+          "added": 1
+        }
+      },
+      "versions": [
+        {
+          "version": "1.1.0",
+          "publishTimestamp": 1793793760,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2"
+          }
+        }
+      ]
+    }
+  ]
+}
