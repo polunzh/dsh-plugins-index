@@ -136,7 +136,7 @@ async function buildIndex() {
 
 const { parseMarketIndex } = await import("@deepseek-ai/dsh-plugin-market-index");
 const indexPath = join(root, "index.json");
-const indexUrl = "https://polunzh.com/dsh-plugins-index/index.json";
+const indexUrl = "https://dsh.127.dev/index.json";
 
 if (checkOnly) {
   const index = await readJson(indexPath);

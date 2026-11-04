@@ -6,7 +6,7 @@
 把下面这一个 URL 加进 DSH「发现」，就能浏览、安装、检测更新、卸载本仓库收录的插件。
 
 ```
-https://polunzh.com/dsh-plugins-index/index.json
+https://dsh.127.dev/index.json
 ```
 
 （备用地址，内容相同：`https://raw.githubusercontent.com/polunzh/dsh-plugins-index/main/index.json`）
@@ -96,7 +96,7 @@ A community-style **plugin market index (format 1)** for [DeepSeek Harness (DSH)
 Add the URL below once to DSH's Discover tab to browse, install, track updates and uninstall the plugins listed here.
 
 ```
-https://polunzh.com/dsh-plugins-index/index.json
+https://dsh.127.dev/index.json
 ```
 
 Fallback URL, same content: `https://raw.githubusercontent.com/polunzh/dsh-plugins-index/main/index.json`
