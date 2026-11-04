@@ -1,0 +1,7 @@
+name = "dsh-plugins-index"
+main = "worker/index.js"
+compatibility_date = "2026-11-04"
+workers_dev = false
+
+# 具体子域路由优先于 zone 上的 *.127.dev/* 兜底路由
+routes = [{ pattern = "dsh.127.dev/*", zone_name = "127.dev" }]

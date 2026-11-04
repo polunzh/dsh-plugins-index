@@ -41,6 +41,12 @@ https://dsh.127.dev/index.json
 - GitHub Actions 每 6 小时跑一次，只有内容变化才提交；也可以手动 `workflow_dispatch`
 - 因此：**发 npm 新版本 → 最迟 6 小时自动出现在索引里**，无需手工改 JSON
 
+### 托管方式
+
+`https://dsh.127.dev/index.json` 由仓库里的 Cloudflare Worker（`worker/index.js` + `wrangler.toml`）提供：
+它按请求实时读取 GitHub 上的 `index.json` 并返回（边缘缓存 5 分钟），只响应 `/index.json`。
+因此发版/刷新索引后无需重新部署 Worker；只有 Worker 代码变更时才需要 `npx wrangler deploy`。
+
 ### 本地构建 / 校验
 
 ```bash
@@ -126,6 +132,13 @@ Fallback URL, same content: `https://raw.githubusercontent.com/polunzh/dsh-plugi
 - `scripts/build-index.mjs` writes `index.json` and **validates it with the official validator** `@deepseek-ai/dsh-plugin-market-index`; nothing is written if validation fails
 - GitHub Actions runs every 6 hours and commits only when something changed; `workflow_dispatch` is available too
 - Net effect: **publish a new npm version → it appears in the index within 6 hours**, no manual JSON editing
+
+### Hosting
+
+`https://dsh.127.dev/index.json` is served by the Cloudflare Worker in this repo (`worker/index.js` +
+`wrangler.toml`): it reads `index.json` from GitHub per request (5-minute edge cache) and only answers
+`/index.json`. Refreshing the index needs no Worker redeploy; `npx wrangler deploy` is only needed when the
+Worker code changes.
 
 ### Build and validate locally
 
