@@ -118,6 +118,17 @@
           "engines": {
             "dsh": ">=0.2.0-rc.2"
           }
+        },
+        {
+          "version": "1.1.2",
+          "publishTimestamp": 1793800818,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2"
+          }
         }
       ]
     }
