@@ -5,8 +5,10 @@
   "description": "Self-hosted DeepSeek Harness plugin market index (format 1)",
   "license": "MIT",
   "scripts": {
-    "build": "node scripts/build-index.mjs",
-    "check": "node scripts/build-index.mjs --check"
+    "build": "node scripts/build-index.mjs && node scripts/build-page.mjs",
+    "build:index": "node scripts/build-index.mjs",
+    "build:page": "node scripts/build-page.mjs",
+    "check": "node scripts/build-index.mjs --check && node scripts/build-page.mjs --check"
   },
   "devDependencies": {
     "@deepseek-ai/dsh-plugin-market-index": "^0.2.1-rc.5"

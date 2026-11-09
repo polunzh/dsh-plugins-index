@@ -1,13 +1,14 @@
-name: 更新市场索引
+name: 更新市场索引与落地页
 
 on:
   schedule:
-    # 每 6 小时刷新一次：新版本发布后最迟 6 小时进入索引
+    # 每 6 小时刷新一次：新版本发布后最迟 6 小时进入索引与落地页
     - cron: "0 */6 * * *"
   workflow_dispatch:
   push:
     paths:
       - "plugins.json"
+      - "site.json"
       - "icons/**"
       - "scripts/**"
       - ".github/workflows/update-index.yml"
@@ -25,20 +26,22 @@ jobs:
         with:
           node-version: "20"
 
-      - name: 安装官方索引校验器
-        run: npm install --no-save @deepseek-ai/dsh-plugin-market-index
+      - name: 安装依赖
+        run: npm ci
 
-      - name: 生成并校验 index.json
-        run: node scripts/build-index.mjs
+      - name: 生成并校验 index.json 与落地页
+        run: |
+          npm run build
+          npm run check
 
       - name: 有变化则提交
         run: |
-          if git diff --quiet -- index.json; then
-            echo "索引无变化"
+          if git diff --quiet -- index.json dist/index.html; then
+            echo "索引与落地页无变化"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.json
-          git commit -m "chore: 刷新市场索引（npm latest）"
+          git add index.json dist/index.html
+          git commit -m "chore: 刷新市场索引与落地页（npm latest）"
           git push

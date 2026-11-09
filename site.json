@@ -1,0 +1,22 @@
+{
+  "author": "polunzh",
+  "repository": "https://github.com/polunzh/dsh-plugins-index",
+  "indexUrl": "https://dsh.127.dev/index.json",
+  "fallbackUrl": "https://raw.githubusercontent.com/polunzh/dsh-plugins-index/main/index.json",
+  "npmAuthor": "https://www.npmjs.com/~polunzh",
+  "communityUrl": "https://dshopen.org/",
+  "hero": {
+    "eyebrow": {
+      "en": "SELF-HOSTED INDEX · FORMAT 1",
+      "zh": "自建索引 · FORMAT 1"
+    },
+    "headline": {
+      "en": "All my DSH plugins,\nin one index.",
+      "zh": "我的 DSH 插件，\n都收在这一个索引里。"
+    },
+    "lede": {
+      "en": "Add the URL once to browse, install and track updates. The index carries metadata only — code and tarballs stay on npm.",
+      "zh": "加一次地址，就能浏览、安装、跟踪更新。索引只带元数据，代码和 tarball 仍然由 npm 提供。"
+    }
+  }
+}
