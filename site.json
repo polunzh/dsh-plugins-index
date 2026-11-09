@@ -7,16 +7,16 @@
   "communityUrl": "https://dshopen.org/",
   "hero": {
     "eyebrow": {
-      "en": "SELF-HOSTED INDEX · FORMAT 1",
-      "zh": "自建索引 · FORMAT 1"
+      "en": "DEEPSEEK HARNESS · PLUGIN INDEX",
+      "zh": "DEEPSEEK HARNESS · 插件索引"
     },
     "headline": {
-      "en": "All my DSH plugins,\nin one index.",
-      "zh": "我的 DSH 插件，\n都收在这一个索引里。"
+      "en": "Plugins for DSH,\nin one index.",
+      "zh": "为 DSH 做的插件，\n收在这一个索引里。"
     },
     "lede": {
-      "en": "Add the URL once to browse, install and track updates. The index carries metadata only — code and tarballs stay on npm.",
-      "zh": "加一次地址，就能浏览、安装、跟踪更新。索引只带元数据，代码和 tarball 仍然由 npm 提供。"
+      "en": "Add the index once, then browse, install and update from Discover in DSH. Packages are published on npm; the index holds only names, descriptions, icons and versions.",
+      "zh": "添加一次索引，就能在 DSH 的「发现」里浏览、安装和更新。插件包在 npm 上，索引只带名称、简介、图标和版本号。"
     }
   }
 }

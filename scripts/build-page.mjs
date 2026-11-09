@@ -50,9 +50,6 @@ function bilingualTag(tagName, zh, en, extraAttributes = "") {
 const bilingual = (zh, en, className = "") =>
   bilingualTag("span", zh, en, className ? ` class="${className}"` : "");
 
-/** Unix 秒 → YYYY-MM-DD（UTC）。 */
-const isoDay = (seconds) => new Date(seconds * 1000).toISOString().slice(0, 10);
-
 /** 人类可读的字节数。 */
 function humanSize(bytes) {
   return bytes < 1024
@@ -60,7 +57,7 @@ function humanSize(bytes) {
     : `${(bytes / 1024).toFixed(bytes < 10 * 1024 ? 1 : 0)} KB`;
 }
 
-/** 从 workflow 的 cron 里读出刷新周期（小时）；读不出就不显示这一栏。 */
+/** 从 workflow 的 cron 里读出刷新周期（小时）；读不出就不显示这一句。 */
 function refreshHours(workflowText) {
   const cron = workflowText.match(/cron:\s*"([^"]+)"/)?.[1];
   const hour = cron?.split(/\s+/)[1];
@@ -68,39 +65,135 @@ function refreshHours(workflowText) {
   return every ? Number(every[1]) : null;
 }
 
-/** 从 index.json 里整理出页面要用的插件数据。 */
-function collectPlugins(index) {
-  const categories = index.metadata?.categories ?? {};
-  const labels = index.metadata?.labels ?? {};
+/**
+ * 数据整形与条目渲染，构建期与浏览器共用同一份实现：
+ * 构建时用 new Function 求值，运行时原样内联进页面。
+ * 这样「索引里的数据」和「页面上的条目」不会因为两套模板而走样。
+ */
+const PAGE_RUNTIME_JS = String.raw`
+var PAGE = (function () {
+  var ARROW = '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 9 9 3M4.5 3H9v4.5"/></svg>';
+  var DOT = '<span class="dot" aria-hidden="true"></span>';
 
-  return index.plugins.map((plugin) => {
-    const versions = plugin.versions ?? [];
-    const latest = versions.at(-1) ?? null;
-    const categoryId = plugin.metadata?.category;
-    const category = categoryId ? categories[categoryId]?.title : null;
-    const tags = (plugin.metadata?.labels ?? [])
-      .map((id) => labels[id]?.title)
-      .filter(Boolean);
-    const repoUrl = plugin.repository?.url ?? plugin.repository;
+  function text(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+  function attrs(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+  /* 双语节点：无 JS 时显示中文，切换语言时改写 */
+  function bi(tag, zh, en, extra) {
+    return '<' + tag + (extra || '') + ' data-zh="' + attrs(zh) + '" data-en="' + attrs(en) + '">' + text(zh) + '</' + tag + '>';
+  }
+  function day(seconds) {
+    return new Date(seconds * 1000).toISOString().slice(0, 10);
+  }
 
-    return {
-      name: plugin.name,
-      title: plugin.title,
-      description: plugin.description,
-      icon: plugin.icon,
-      latest: latest?.version ?? null,
-      publishedAt: latest ? isoDay(latest.publishTimestamp) : null,
-      enginesDsh: latest?.engines?.dsh ?? null,
-      categoryId: categoryId ?? null,
-      category,
-      tags,
-      homepage: plugin.homepage ?? null,
-      repoUrl: repoUrl ?? null,
-      npmUrl: `https://www.npmjs.com/package/${plugin.name}`,
-      keywords: plugin.metadata?.keywords ?? [],
-    };
-  });
-}
+  function normalize(index) {
+    var meta = index.metadata || {};
+    var categories = meta.categories || {};
+    var labels = meta.labels || {};
+    return (index.plugins || []).map(function (plugin) {
+      var versions = plugin.versions || [];
+      var latest = versions.length ? versions[versions.length - 1] : null;
+      var categoryId = (plugin.metadata && plugin.metadata.category) || '';
+      var category = categoryId && categories[categoryId] ? categories[categoryId].title : null;
+      var tags = ((plugin.metadata && plugin.metadata.labels) || []).map(function (id) {
+        return labels[id] ? labels[id].title : null;
+      }).filter(Boolean);
+      var repo = plugin.repository && plugin.repository.url ? plugin.repository.url : (plugin.repository || null);
+      return {
+        name: plugin.name,
+        title: plugin.title || { zh: plugin.name, en: plugin.name },
+        description: plugin.description || { zh: '', en: '' },
+        icon: plugin.icon || '',
+        latest: latest ? latest.version : null,
+        publishedAt: latest ? day(latest.publishTimestamp) : null,
+        enginesDsh: latest && latest.engines ? (latest.engines.dsh || null) : null,
+        categoryId: categoryId,
+        category: category,
+        tags: tags,
+        repoUrl: repo,
+        npmUrl: 'https://www.npmjs.com/package/' + plugin.name
+      };
+    });
+  }
+
+  function row(plugin, i, ui) {
+    var meta = ['<span>' + text(plugin.name) + '</span>'];
+    if (plugin.category) meta.push(DOT, bi('span', plugin.category.zh, plugin.category.en));
+    if (plugin.publishedAt) meta.push(DOT, bi('span', plugin.publishedAt + ' ' + ui.zh.updated, ui.en.updated + ' ' + plugin.publishedAt));
+    if (plugin.enginesDsh) meta.push(DOT, bi('span', ui.zh.requires + ' ' + plugin.enginesDsh, ui.en.requires + ' ' + plugin.enginesDsh));
+    var tags = plugin.tags.map(function (tag) { return bi('li', tag.zh, tag.en); });
+    var links = [];
+    if (plugin.repoUrl) {
+      links.push('<a class="lnk" href="' + attrs(plugin.repoUrl) + '" target="_blank" rel="noopener">' + bi('span', ui.zh.srcLink, ui.en.srcLink) + ARROW + '</a>');
+    }
+    links.push('<a class="lnk" href="' + attrs(plugin.npmUrl) + '" target="_blank" rel="noopener"><span>npm</span>' + ARROW + '</a>');
+
+    return '<article class="plugin rise" style="--d:' + (120 + i * 60) + 'ms"' +
+      ' data-cat="' + attrs(plugin.categoryId) + '"' +
+      ' data-plugin="' + attrs(plugin.name) + '"' +
+      ' data-version="' + attrs(plugin.latest) + '">' +
+        '<img class="plugin__icon" alt="" src="' + attrs(plugin.icon) + '" />' +
+        '<div>' +
+          '<div class="plugin__title">' +
+            '<h3>' + bi('span', plugin.title.zh, plugin.title.en) + '</h3>' +
+            (plugin.latest ? '<span class="ver">v' + text(plugin.latest) + '</span>' : '') +
+          '</div>' +
+          '<div class="plugin__id">' + meta.join('') + '</div>' +
+          '<p class="plugin__desc">' + bi('span', plugin.description.zh, plugin.description.en) + '</p>' +
+          (tags.length ? '<ul class="tags">' + tags.join('') + '</ul>' : '') +
+        '</div>' +
+        '<div class="plugin__acts">' + links.join('') + '</div>' +
+      '</article>';
+  }
+
+  function chips(plugins, ui) {
+    var seen = {};
+    var order = [];
+    plugins.forEach(function (plugin) {
+      if (plugin.categoryId && plugin.category && !seen[plugin.categoryId]) {
+        seen[plugin.categoryId] = plugin.category;
+        order.push(plugin.categoryId);
+      }
+    });
+    if (plugins.length < 2 || order.length < 2) return '';
+    var out = ['<button type="button" data-cat="*" aria-pressed="true">' + bi('span', ui.zh.all, ui.en.all) + '</button>'];
+    order.forEach(function (id) {
+      out.push('<button type="button" data-cat="' + attrs(id) + '" aria-pressed="false">' + bi('span', seen[id].zh, seen[id].en) + '</button>');
+    });
+    return '<div class="chips">' + out.join('') + '</div>';
+  }
+
+  function fingerprint(plugins) {
+    return plugins.map(function (plugin) {
+      return [
+        plugin.name, plugin.latest, plugin.publishedAt, plugin.enginesDsh, plugin.categoryId,
+        plugin.title.zh, plugin.title.en, plugin.description.zh, plugin.description.en
+      ].join('|');
+    }).join('\n');
+  }
+
+  function hash(value) {
+    var h = 5381;
+    for (var i = 0; i < value.length; i++) h = ((h * 33) ^ value.charCodeAt(i)) >>> 0;
+    return h.toString(36);
+  }
+
+  return { normalize: normalize, row: row, chips: chips, fingerprint: fingerprint, hash: hash };
+})();
+`;
+
+/** 构建期求值同一份运行时，用于生成静态 HTML。 */
+const PAGE = new Function(`${PAGE_RUNTIME_JS}; return PAGE;`)();
 
 const CSS = String.raw`
   /* ── tokens ─────────────────────────────────────────────── */
@@ -228,6 +321,7 @@ const CSS = String.raw`
     padding: clamp(56px, 9vw, 108px) 0 clamp(44px, 6vw, 76px);
   }
   .hero__lead > * { max-width: 34ch; }
+  .hero__lead .lede { max-width: 60ch; }
   .eyebrow {
     display: flex; align-items: center; gap: 10px; margin: 0 0 clamp(20px, 3vw, 32px);
     max-width: none;
@@ -307,7 +401,7 @@ const CSS = String.raw`
     margin: 0; font-family: var(--mono); font-size: 12.5px; color: var(--ink);
     text-align: right; font-variant-numeric: tabular-nums;
   }
-  .plate__foot { margin: 16px 0 0; font-size: 11.5px; color: var(--ink-3); line-height: 1.6; max-width: 30ch; }
+  .plate__foot { margin: 16px 0 0; font-size: 11.5px; color: var(--ink-3); line-height: 1.6; max-width: 34ch; }
 
   /* ── section scaffolding ────────────────────────────────── */
   section { scroll-margin-top: 78px; }
@@ -458,10 +552,11 @@ const CSS = String.raw`
   }
 `;
 
-/** 页面运行时脚本（内联）。不用模板字符串，避免与构建脚本的模板字面量冲突。 */
+/** 页面运行时脚本（内联）。PAGE 与 PAGE_UI 由同一 <script> 中的构建产物先声明。 */
 const CLIENT_JS = String.raw`
   (function () {
     var root = document.documentElement;
+    var UI = PAGE_UI;
     var store = {
       get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
       set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -534,7 +629,7 @@ const CLIENT_JS = String.raw`
 
     copyBtn.addEventListener('click', function () {
       var text = urlEl.textContent.trim();
-      flash('done'); // 先给反馈，失败再改口
+      flash('done'); /* 先给反馈，失败再改口 */
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).catch(function () {
           if (!legacyCopy(text)) flash('failed');
@@ -545,23 +640,58 @@ const CLIENT_JS = String.raw`
     });
 
     /* ── 分类筛选 ── */
-    var chips = document.querySelectorAll('.chips button');
-    for (var c = 0; c < chips.length; c++) {
-      chips[c].addEventListener('click', function (event) {
-        var chip = event.currentTarget;
-        var wanted = chip.getAttribute('data-cat');
-        for (var i = 0; i < chips.length; i++) chips[i].setAttribute('aria-pressed', String(chips[i] === chip));
-        var rows = document.querySelectorAll('.plugin');
-        for (var j = 0; j < rows.length; j++) {
-          var match = wanted === '*' || rows[j].getAttribute('data-cat') === wanted;
-          if (match) rows[j].removeAttribute('hidden');
-          else rows[j].setAttribute('hidden', '');
-        }
-      });
+    function bindChips() {
+      var chips = document.querySelectorAll('#chipSlot button');
+      for (var c = 0; c < chips.length; c++) {
+        chips[c].addEventListener('click', function (event) {
+          var chip = event.currentTarget;
+          var wanted = chip.getAttribute('data-cat');
+          var all = document.querySelectorAll('#chipSlot button');
+          for (var i = 0; i < all.length; i++) all[i].setAttribute('aria-pressed', String(all[i] === chip));
+          var rows = document.querySelectorAll('.plugin');
+          for (var j = 0; j < rows.length; j++) {
+            var match = wanted === '*' || rows[j].getAttribute('data-cat') === wanted;
+            if (match) rows[j].removeAttribute('hidden');
+            else rows[j].setAttribute('hidden', '');
+          }
+        });
+      }
+    }
+
+    /* ── 用索引里的最新数据重绘（索引更新后无需重建页面） ── */
+    function render(list) {
+      var host = document.getElementById('pluginList');
+      if (host) host.innerHTML = list.map(function (plugin, i) { return PAGE.row(plugin, i, UI); }).join('\n');
+      var slot = document.getElementById('chipSlot');
+      if (slot) slot.innerHTML = PAGE.chips(list, UI);
+      var count = document.getElementById('pluginCount');
+      if (count) count.textContent = String(list.length);
+      var last = document.getElementById('lastPublish');
+      if (last) {
+        var dates = list.map(function (plugin) { return plugin.publishedAt; }).filter(Boolean).sort();
+        if (dates.length) last.textContent = dates[dates.length - 1];
+      }
+      bindChips();
+      applyLang(lang);
     }
 
     langBtn.addEventListener('click', function () { applyLang(lang === 'zh' ? 'en' : 'zh'); });
     applyLang(lang);
+    bindChips();
+
+    var main = document.querySelector('main');
+    var built = main ? main.getAttribute('data-fp') : null;
+    if (built && window.fetch && location.protocol !== 'file:') {
+      fetch('index.json', { credentials: 'omit' })
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (data) {
+          if (!data || !data.plugins) return;
+          var list = PAGE.normalize(data);
+          if (PAGE.hash(PAGE.fingerprint(list)) === built) return;
+          render(list);
+        })
+        .catch(function () {});
+    }
   })();
 `;
 
@@ -569,60 +699,48 @@ const CLIENT_JS = String.raw`
 const UI = {
   zh: {
     navPlugins: "插件",
-    navInstall: "安装",
+    navInstall: "开始使用",
     sourceCap: "索引地址",
     copy: "复制",
-    fallback: "备用",
+    fallback: "备用地址",
     glance: "索引概况",
-    pluginsRow: "收录插件",
-    lastPublish: "最近发布",
-    sourceRow: "数据源",
-    refreshRow: "刷新间隔",
-    sizeRow: "索引体积",
-    codeRow: "代码托管",
-    noCode: "无 · 只在 npm",
-    workerNote: "由 Cloudflare Worker 实时读取仓库里的 index.json，边缘缓存 5 分钟。",
-    pluginsTitle: "收录的插件",
-    pluginsNote: "数据随 npm 自动刷新，无需手工改 JSON",
+    pluginsTitle: "插件",
+    pluginsRow: "插件",
+    lastPublish: "最近更新",
+    categoryRow: "分类",
+    enginesRow: "DSH 版本",
+    sourceRow: "来源",
+    pluginsNote: "共 {n} 个",
     all: "全部",
-    refreshedAt: "更新",
-    requires: "要求 DSH",
+    updated: "更新",
+    requires: "需要 DSH",
     srcLink: "源码",
-    hint: "新插件以同一格式登记在 plugins.json，构建时自动并进索引。",
-    installTitle: "装上它",
-    installNote: "DSH 的插件管理器负责真正的安装动作",
-    then: "之后",
-    thenText: "有新版本时条目会标 update-available；卸载在「插件 → 已安装」里完成。",
-    footNote: "MIT 协议 · 索引不含任何跟踪与代码",
+    installTitle: "开始使用",
+    thenText: "插件有新版本时，「发现」里的卡片会提示；卸载在「已安装」里完成。",
+    footNote: "由 polunzh 维护 · MIT 协议",
     community: "社区市场",
   },
   en: {
     navPlugins: "Plugins",
-    navInstall: "Install",
-    sourceCap: "Index source",
+    navInstall: "Getting started",
+    sourceCap: "Index URL",
     copy: "Copy",
-    fallback: "Fallback",
-    glance: "At a glance",
-    pluginsRow: "Plugins",
-    lastPublish: "Last publish",
-    sourceRow: "Source",
-    refreshRow: "Refresh",
-    sizeRow: "Size",
-    codeRow: "Code",
-    noCode: "none · npm only",
-    workerNote: "A Cloudflare Worker reads index.json from the repo on each request, cached at the edge for 5 minutes.",
+    fallback: "Backup",
+    glance: "Overview",
     pluginsTitle: "Plugins",
-    pluginsNote: "Refreshed from npm automatically — no manual JSON edits",
+    pluginsRow: "Plugins",
+    lastPublish: "Updated",
+    categoryRow: "Categories",
+    enginesRow: "DSH version",
+    sourceRow: "Source",
+    pluginsNote: "{n} total",
     all: "All",
-    refreshedAt: "updated",
+    updated: "updated",
     requires: "needs DSH",
     srcLink: "Source",
-    hint: "New plugins are registered in plugins.json in the same shape and merged into the index at build time.",
-    installTitle: "Install",
-    installNote: "DSH's plugin manager performs the actual install",
-    then: "Then",
-    thenText: "New versions are flagged update-available; uninstall from Plugins → Installed.",
-    footNote: "MIT licensed · no tracking, no code in the index",
+    installTitle: "Getting started",
+    thenText: "Cards in Discover flag new versions; uninstall from Installed.",
+    footNote: "Maintained by polunzh · MIT",
     community: "Community market",
   },
 };
@@ -630,97 +748,41 @@ const UI = {
 /** 安装步骤（描述的是 DSH 界面，与具体插件无关）。 */
 const STEPS = [
   {
-    zh: { title: "打开自定义索引", body: "DSH → 插件 → 实验性插件 → 启用「自定义插件索引」。" },
-    en: { title: "Enable custom indexes", body: "DSH → Plugins → Experimental plugins → enable Custom plugin indexes." },
+    zh: { title: "启用自定义索引", body: "在 DSH 的「插件 → 实验性插件」里打开「自定义插件索引」。" },
+    en: { title: "Enable custom indexes", body: "Open Plugins → Experimental plugins in DSH and enable Custom plugin indexes." },
   },
   {
-    zh: { title: "添加索引源", body: "插件 → 发现 → 添加索引源，粘贴上面的地址。" },
-    en: { title: "Add the index source", body: "Plugins → Discover → Add index source, then paste the URL above." },
+    zh: { title: "添加索引地址", body: "进入「发现」，点「添加索引源」，粘贴上面的地址。" },
+    en: { title: "Add the index", body: "Open Discover, choose Add index source, and paste the URL above." },
   },
   {
-    zh: { title: "浏览并安装", body: "在「发现」里搜索或浏览，装的是 npm 上的真实包。" },
-    en: { title: "Browse and install", body: "Search or browse in Discover; you install the real npm package." },
+    zh: { title: "安装插件", body: "在「发现」里找到插件，点「安装」。" },
+    en: { title: "Install", body: "Find the plugin in Discover and choose Install." },
   },
 ];
 
-/** 渲染一个插件条目。 */
-function renderPlugin(plugin, index) {
-  const title = plugin.title ?? { zh: plugin.name, en: plugin.name };
-  const desc = plugin.description ?? { zh: "", en: "" };
-  const tags = plugin.tags.map((tag) => bilingualTag("li", tag.zh, tag.en));
-  const metaBits = [`<span>${esc(plugin.name)}</span>`];
-
-  if (plugin.category) {
-    metaBits.push('<span class="dot" aria-hidden="true"></span>');
-    metaBits.push(bilingual(plugin.category.zh, plugin.category.en));
-  }
-  if (plugin.publishedAt) {
-    metaBits.push('<span class="dot" aria-hidden="true"></span>');
-    metaBits.push(bilingual(`${plugin.publishedAt} ${UI.zh.refreshedAt}`, `${UI.en.refreshedAt} ${plugin.publishedAt}`));
-  }
-  if (plugin.enginesDsh) {
-    metaBits.push('<span class="dot" aria-hidden="true"></span>');
-    metaBits.push(bilingual(`${UI.zh.requires} ${plugin.enginesDsh}`, `${UI.en.requires} ${plugin.enginesDsh}`));
-  }
-
-  const arrow = '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 9 9 3M4.5 3H9v4.5"/></svg>';
-  const links = [];
-  if (plugin.repoUrl) {
-    links.push(`<a class="lnk" href="${attr(plugin.repoUrl)}" target="_blank" rel="noopener">${bilingual(UI.zh.srcLink, UI.en.srcLink)}${arrow}</a>`);
-  }
-  links.push(`<a class="lnk" href="${attr(plugin.npmUrl)}" target="_blank" rel="noopener"><span>npm</span>${arrow}</a>`);
-
-  return `
-      <article class="plugin rise" style="--d:${120 + index * 60}ms" data-cat="${attr(plugin.categoryId ?? "")}">
-        <img class="plugin__icon" alt="" src="${attr(plugin.icon)}" />
-        <div>
-          <div class="plugin__title">
-            <h3>${bilingual(title.zh, title.en)}</h3>
-            ${plugin.latest ? `<span class="ver">v${esc(plugin.latest)}</span>` : ""}
-          </div>
-          <div class="plugin__id">${metaBits.join("\n            ")}</div>
-          <p class="plugin__desc">${bilingual(desc.zh, desc.en)}</p>
-          ${tags.length ? `<ul class="tags">\n            ${tags.join("\n            ")}\n          </ul>` : ""}
-        </div>
-        <div class="plugin__acts">
-          ${links.join("\n          ")}
-        </div>
-      </article>`;
-}
-
-/** 渲染分类筛选条（只有出现多个分类时才有意义）。 */
-function renderChips(plugins) {
-  const categories = new Map();
-  for (const plugin of plugins) {
-    if (plugin.categoryId && plugin.category) categories.set(plugin.categoryId, plugin.category);
-  }
-  if (plugins.length < 2 || categories.size < 2) return "";
-
-  const chips = [`<button type="button" data-cat="*" aria-pressed="true">${bilingual(UI.zh.all, UI.en.all)}</button>`];
-  for (const [id, title] of categories) {
-    chips.push(`<button type="button" data-cat="${attr(id)}" aria-pressed="false">${bilingual(title.zh, title.en)}</button>`);
-  }
-  return `\n      <div class="chips">${chips.join("")}</div>`;
-}
-
 /** 拼出整页。 */
-function renderPage({ index, site, plugins, indexBytes, hours }) {
+function renderPage({ index, site, plugins, hours }) {
   const title = index.title;
   const description = index.description;
   const hero = site.hero;
   const lastPublish = plugins.map((p) => p.publishedAt).filter(Boolean).sort().at(-1);
+  const categories = [];
+  for (const plugin of plugins) {
+    if (plugin.category && !categories.some((c) => c.zh === plugin.category.zh)) categories.push(plugin.category);
+  }
+  const categoryText = categories.map((c) => c.zh).join("、");
+  const categoryTextEn = categories.map((c) => c.en).join(", ");
 
   const rows = [
-    `<div class="plate__row"><dt>${bilingual(UI.zh.pluginsRow, UI.en.pluginsRow)}</dt><dd>${plugins.length}</dd></div>`,
+    `<div class="plate__row"><dt>${bilingual(UI.zh.pluginsRow, UI.en.pluginsRow)}</dt><dd id="pluginCount">${plugins.length}</dd></div>`,
     lastPublish
-      ? `<div class="plate__row"><dt>${bilingual(UI.zh.lastPublish, UI.en.lastPublish)}</dt><dd>${esc(lastPublish)}</dd></div>`
+      ? `<div class="plate__row"><dt>${bilingual(UI.zh.lastPublish, UI.en.lastPublish)}</dt><dd id="lastPublish">${esc(lastPublish)}</dd></div>`
       : "",
-    `<div class="plate__row"><dt>${bilingual(UI.zh.sourceRow, UI.en.sourceRow)}</dt><dd>npm registry</dd></div>`,
-    hours
-      ? `<div class="plate__row"><dt>${bilingual(UI.zh.refreshRow, UI.en.refreshRow)}</dt><dd>${bilingual(`每 ${hours} 小时`, `every ${hours} h`)}</dd></div>`
+    categories.length
+      ? `<div class="plate__row"><dt>${bilingual(UI.zh.categoryRow, UI.en.categoryRow)}</dt><dd>${bilingual(categoryText, categoryTextEn)}</dd></div>`
       : "",
-    `<div class="plate__row"><dt>${bilingual(UI.zh.sizeRow, UI.en.sizeRow)}</dt><dd>${esc(humanSize(indexBytes))}</dd></div>`,
-    `<div class="plate__row"><dt>${bilingual(UI.zh.codeRow, UI.en.codeRow)}</dt><dd>${bilingual(UI.zh.noCode, UI.en.noCode)}</dd></div>`,
+    `<div class="plate__row"><dt>${bilingual(UI.zh.sourceRow, UI.en.sourceRow)}</dt><dd>npm</dd></div>`,
   ].filter(Boolean);
 
   const steps = STEPS.map(
@@ -790,7 +852,7 @@ function renderPage({ index, site, plugins, indexBytes, hours }) {
   </div>
 </header>
 
-<main class="wrap">
+<main class="wrap" data-fp="${PAGE.hash(PAGE.fingerprint(plugins))}">
 
   <section class="hero">
     <div class="hero__lead">
@@ -801,7 +863,6 @@ function renderPage({ index, site, plugins, indexBytes, hours }) {
       <div class="src rise" style="--d:270ms">
         <div class="src__head">
           <span class="cap">${bilingual(UI.zh.sourceCap, UI.en.sourceCap)}</span>
-          <span class="cap" style="letter-spacing:.12em">/index.json</span>
         </div>
         <div class="src__row">
           <span class="src__url" id="indexUrl">${esc(site.indexUrl)}</span>
@@ -817,12 +878,11 @@ function renderPage({ index, site, plugins, indexBytes, hours }) {
     <aside class="plate rise" style="--d:340ms">
       <div class="plate__title">
         <span class="cap">${bilingual(UI.zh.glance, UI.en.glance)}</span>
-        <span class="mono" style="font-size:11px;color:var(--ink-3)">format ${esc(index.format ?? 1)}</span>
       </div>
       <dl>
         ${rows.join("\n        ")}
       </dl>
-      <p class="plate__foot">${bilingual(UI.zh.workerNote, UI.en.workerNote)}</p>
+      ${hours ? `<p class="plate__foot">${bilingual(`新版本发布后，最迟 ${hours} 小时更新。`, `New releases appear here within ${hours} hours.`)}</p>` : ""}
     </aside>
   </section>
 
@@ -832,11 +892,11 @@ function renderPage({ index, site, plugins, indexBytes, hours }) {
         <span class="sec__num">01</span>
         <span class="sec__name">${bilingual(UI.zh.pluginsTitle, UI.en.pluginsTitle)}</span>
       </h2>
-      <span class="sec__note">${bilingual(UI.zh.pluginsNote, UI.en.pluginsNote)}</span>
-    </div>${renderChips(plugins)}
-${plugins.map(renderPlugin).join("\n")}
-
-    <p class="plugin__hint">${bilingual(UI.zh.hint, UI.en.hint)}</p>
+    </div>
+    <div id="chipSlot">${PAGE.chips(plugins, UI)}</div>
+    <div id="pluginList">
+${plugins.map((plugin, i) => PAGE.row(plugin, i, UI)).join("\n")}
+    </div>
   </section>
 
   <section class="install" id="install">
@@ -845,16 +905,12 @@ ${plugins.map(renderPlugin).join("\n")}
         <span class="sec__num">02</span>
         <span class="sec__name">${bilingual(UI.zh.installTitle, UI.en.installTitle)}</span>
       </h2>
-      <span class="sec__note">${bilingual(UI.zh.installNote, UI.en.installNote)}</span>
     </div>
 
     <ol class="steps">${steps}
     </ol>
 
-    <p class="install__foot">
-      <span>${bilingual(UI.zh.then, UI.en.then)}</span>
-      <span>${bilingual(UI.zh.thenText, UI.en.thenText)}</span>
-    </p>
+    <p class="install__foot">${bilingual(UI.zh.thenText, UI.en.thenText)}</p>
   </section>
 
 </main>
@@ -872,7 +928,9 @@ ${plugins.map(renderPlugin).join("\n")}
   </div>
 </footer>
 
-<script>${CLIENT_JS}</script>
+<script>${PAGE_RUNTIME_JS}
+var PAGE_UI = ${JSON.stringify(UI)};
+${CLIENT_JS}</script>
 </body>
 </html>
 `;
@@ -883,13 +941,12 @@ const [indexText, site] = await Promise.all([readText("index.json"), readJson("s
 const index = JSON.parse(indexText);
 const workflowPath = ".github/workflows/update-index.yml";
 const hours = await readText(workflowPath).then(refreshHours).catch(() => null);
-const plugins = collectPlugins(index);
+const plugins = PAGE.normalize(index);
 
 const html = renderPage({
   index,
   site,
   plugins,
-  indexBytes: Buffer.byteLength(indexText),
   hours,
 });
 

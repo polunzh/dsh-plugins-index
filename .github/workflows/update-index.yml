@@ -9,6 +9,7 @@ on:
     paths:
       - "plugins.json"
       - "site.json"
+      - "index.json"
       - "icons/**"
       - "scripts/**"
       - ".github/workflows/update-index.yml"

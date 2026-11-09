@@ -151,6 +151,7 @@
     padding: clamp(56px, 9vw, 108px) 0 clamp(44px, 6vw, 76px);
   }
   .hero__lead > * { max-width: 34ch; }
+  .hero__lead .lede { max-width: 60ch; }
   .eyebrow {
     display: flex; align-items: center; gap: 10px; margin: 0 0 clamp(20px, 3vw, 32px);
     max-width: none;
@@ -230,7 +231,7 @@
     margin: 0; font-family: var(--mono); font-size: 12.5px; color: var(--ink);
     text-align: right; font-variant-numeric: tabular-nums;
   }
-  .plate__foot { margin: 16px 0 0; font-size: 11.5px; color: var(--ink-3); line-height: 1.6; max-width: 30ch; }
+  .plate__foot { margin: 16px 0 0; font-size: 11.5px; color: var(--ink-3); line-height: 1.6; max-width: 34ch; }
 
   /* ── section scaffolding ────────────────────────────────── */
   section { scroll-margin-top: 78px; }
@@ -393,7 +394,7 @@
     </div>
     <nav class="top__nav">
       <a href="#plugins" class="hide-sm"><span data-zh="插件" data-en="Plugins">插件</span></a>
-      <a href="#install" class="hide-sm"><span data-zh="安装" data-en="Install">安装</span></a>
+      <a href="#install" class="hide-sm"><span data-zh="开始使用" data-en="Getting started">开始使用</span></a>
       <a href="https://github.com/polunzh/dsh-plugins-index" target="_blank" rel="noopener">GitHub&nbsp;↗</a>
       <div class="ctrl">
         <button class="pill" id="langBtn" aria-label="Switch language">EN</button>
@@ -410,28 +411,27 @@
   </div>
 </header>
 
-<main class="wrap">
+<main class="wrap" data-fp="4y5s05">
 
   <section class="hero">
     <div class="hero__lead">
-      <p class="cap eyebrow rise" style="--d:40ms"><span data-zh="自建索引 · FORMAT 1" data-en="SELF-HOSTED INDEX · FORMAT 1">自建索引 · FORMAT 1</span></p>
-      <h1 class="rise" style="--d:110ms"><span data-zh="我的 DSH 插件，
-都收在这一个索引里。" data-en="All my DSH plugins,
-in one index.">我的 DSH 插件，
-都收在这一个索引里。</span></h1>
-      <p class="lede rise" style="--d:190ms"><span data-zh="加一次地址，就能浏览、安装、跟踪更新。索引只带元数据，代码和 tarball 仍然由 npm 提供。" data-en="Add the URL once to browse, install and track updates. The index carries metadata only — code and tarballs stay on npm.">加一次地址，就能浏览、安装、跟踪更新。索引只带元数据，代码和 tarball 仍然由 npm 提供。</span></p>
+      <p class="cap eyebrow rise" style="--d:40ms"><span data-zh="DEEPSEEK HARNESS · 插件索引" data-en="DEEPSEEK HARNESS · PLUGIN INDEX">DEEPSEEK HARNESS · 插件索引</span></p>
+      <h1 class="rise" style="--d:110ms"><span data-zh="为 DSH 做的插件，
+收在这一个索引里。" data-en="Plugins for DSH,
+in one index.">为 DSH 做的插件，
+收在这一个索引里。</span></h1>
+      <p class="lede rise" style="--d:190ms"><span data-zh="添加一次索引，就能在 DSH 的「发现」里浏览、安装和更新。插件包在 npm 上，索引只带名称、简介、图标和版本号。" data-en="Add the index once, then browse, install and update from Discover in DSH. Packages are published on npm; the index holds only names, descriptions, icons and versions.">添加一次索引，就能在 DSH 的「发现」里浏览、安装和更新。插件包在 npm 上，索引只带名称、简介、图标和版本号。</span></p>
 
       <div class="src rise" style="--d:270ms">
         <div class="src__head">
-          <span class="cap"><span data-zh="索引地址" data-en="Index source">索引地址</span></span>
-          <span class="cap" style="letter-spacing:.12em">/index.json</span>
+          <span class="cap"><span data-zh="索引地址" data-en="Index URL">索引地址</span></span>
         </div>
         <div class="src__row">
           <span class="src__url" id="indexUrl">https://dsh.127.dev/index.json</span>
           <button class="copy" id="copyBtn" type="button">复制</button>
         </div>
         <div class="src__alt">
-          <span><span data-zh="备用" data-en="Fallback">备用</span></span>
+          <span><span data-zh="备用地址" data-en="Backup">备用地址</span></span>
           <code>https://raw.githubusercontent.com/polunzh/dsh-plugins-index/main/index.json</code>
         </div>
       </div>
@@ -439,18 +439,15 @@ in one index.">我的 DSH 插件，
 
     <aside class="plate rise" style="--d:340ms">
       <div class="plate__title">
-        <span class="cap"><span data-zh="索引概况" data-en="At a glance">索引概况</span></span>
-        <span class="mono" style="font-size:11px;color:var(--ink-3)">format 1</span>
+        <span class="cap"><span data-zh="索引概况" data-en="Overview">索引概况</span></span>
       </div>
       <dl>
-        <div class="plate__row"><dt><span data-zh="收录插件" data-en="Plugins">收录插件</span></dt><dd>2</dd></div>
-        <div class="plate__row"><dt><span data-zh="最近发布" data-en="Last publish">最近发布</span></dt><dd>2026-11-08</dd></div>
-        <div class="plate__row"><dt><span data-zh="数据源" data-en="Source">数据源</span></dt><dd>npm registry</dd></div>
-        <div class="plate__row"><dt><span data-zh="刷新间隔" data-en="Refresh">刷新间隔</span></dt><dd><span data-zh="每 6 小时" data-en="every 6 h">每 6 小时</span></dd></div>
-        <div class="plate__row"><dt><span data-zh="索引体积" data-en="Size">索引体积</span></dt><dd>8.2 KB</dd></div>
-        <div class="plate__row"><dt><span data-zh="代码托管" data-en="Code">代码托管</span></dt><dd><span data-zh="无 · 只在 npm" data-en="none · npm only">无 · 只在 npm</span></dd></div>
+        <div class="plate__row"><dt><span data-zh="插件" data-en="Plugins">插件</span></dt><dd id="pluginCount">2</dd></div>
+        <div class="plate__row"><dt><span data-zh="最近更新" data-en="Updated">最近更新</span></dt><dd id="lastPublish">2026-11-08</dd></div>
+        <div class="plate__row"><dt><span data-zh="分类" data-en="Categories">分类</span></dt><dd><span data-zh="界面、工具" data-en="Interface, Tools">界面、工具</span></dd></div>
+        <div class="plate__row"><dt><span data-zh="来源" data-en="Source">来源</span></dt><dd>npm</dd></div>
       </dl>
-      <p class="plate__foot"><span data-zh="由 Cloudflare Worker 实时读取仓库里的 index.json，边缘缓存 5 分钟。" data-en="A Cloudflare Worker reads index.json from the repo on each request, cached at the edge for 5 minutes.">由 Cloudflare Worker 实时读取仓库里的 index.json，边缘缓存 5 分钟。</span></p>
+      <p class="plate__foot"><span data-zh="新版本发布后，最迟 6 小时更新。" data-en="New releases appear here within 6 hours.">新版本发布后，最迟 6 小时更新。</span></p>
     </aside>
   </section>
 
@@ -458,99 +455,43 @@ in one index.">我的 DSH 插件，
     <div class="sec__head">
       <h2 class="sec__title">
         <span class="sec__num">01</span>
-        <span class="sec__name"><span data-zh="收录的插件" data-en="Plugins">收录的插件</span></span>
+        <span class="sec__name"><span data-zh="插件" data-en="Plugins">插件</span></span>
       </h2>
-      <span class="sec__note"><span data-zh="数据随 npm 自动刷新，无需手工改 JSON" data-en="Refreshed from npm automatically — no manual JSON edits">数据随 npm 自动刷新，无需手工改 JSON</span></span>
     </div>
-      <div class="chips"><button type="button" data-cat="*" aria-pressed="true"><span data-zh="全部" data-en="All">全部</span></button><button type="button" data-cat="interface" aria-pressed="false"><span data-zh="界面" data-en="Interface">界面</span></button><button type="button" data-cat="tools" aria-pressed="false"><span data-zh="工具" data-en="Tools">工具</span></button></div>
-
-      <article class="plugin rise" style="--d:120ms" data-cat="interface">
-        <img class="plugin__icon" alt="" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPCEtLSDpk4Ppk5vvvJrku7vliqHlrozmiJDnmoTpgJrnn6XmhJ/vvJvnlKjnuq/ok53ooajovr7jgIzku7vliqHpnaLmnb/jgI3ov5nkuKrlhaXlj6MgLS0+CiAgPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMjYiIGZpbGw9IiMyNDdiYmYiLz4KICA8cGF0aCBkPSJNMzIgMTdhMTEgMTEgMCAwIDEgMTEgMTF2Ni40YzAgMS42LjYgMy4xIDEuNyA0LjNsMi4xIDIuM2MuNy44LjEgMi0xIDJIMjAuMmMtMS4xIDAtMS43LTEuMi0xLTJsMi4xLTIuM2E2LjMgNi4zIDAgMCAwIDEuNy00LjNWMjhhMTEgMTEgMCAwIDEgMTEtMTFaIiBmaWxsPSIjZmZmZmZmIi8+CiAgPHBhdGggZD0iTTI3IDQ1aDEwYTUgNSAwIDAgMS0xMCAwWiIgZmlsbD0iI2ZmZmZmZiIvPgo8L3N2Zz4K" />
-        <div>
-          <div class="plugin__title">
-            <h3><span data-zh="任务通知台" data-en="Task Notifier">任务通知台</span></h3>
-            <span class="ver">v1.2.1</span>
-          </div>
-          <div class="plugin__id"><span>@polunzh/dsh-task-notifier</span>
-            <span class="dot" aria-hidden="true"></span>
-            <span data-zh="界面" data-en="Interface">界面</span>
-            <span class="dot" aria-hidden="true"></span>
-            <span data-zh="2026-11-08 更新" data-en="updated 2026-11-08">2026-11-08 更新</span>
-            <span class="dot" aria-hidden="true"></span>
-            <span data-zh="要求 DSH &gt;=0.2.0-rc.2" data-en="needs DSH &gt;=0.2.0-rc.2">要求 DSH &gt;=0.2.0-rc.2</span></div>
-          <p class="plugin__desc"><span data-zh="任务完成时响提示音并弹系统/浏览器通知；侧边栏「任务」面板可筛选已完成未读 / 运行中 / 已完成 / 全部，未读状态本地持久化。" data-en="Chime + system/browser notification when a task finishes, plus a Tasks sidebar panel filtering unread / running / completed sessions; unread state persists locally.">任务完成时响提示音并弹系统/浏览器通知；侧边栏「任务」面板可筛选已完成未读 / 运行中 / 已完成 / 全部，未读状态本地持久化。</span></p>
-          <ul class="tags">
-            <li data-zh="macOS" data-en="macOS">macOS</li>
-            <li data-zh="中英双语" data-en="Bilingual">中英双语</li>
-            <li data-zh="纯本地" data-en="Local only">纯本地</li>
-          </ul>
-        </div>
-        <div class="plugin__acts">
-          <a class="lnk" href="https://github.com/polunzh/dsh-task-notifier" target="_blank" rel="noopener"><span data-zh="源码" data-en="Source">源码</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 9 9 3M4.5 3H9v4.5"/></svg></a>
-          <a class="lnk" href="https://www.npmjs.com/package/@polunzh/dsh-task-notifier" target="_blank" rel="noopener"><span>npm</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 9 9 3M4.5 3H9v4.5"/></svg></a>
-        </div>
-      </article>
-
-      <article class="plugin rise" style="--d:180ms" data-cat="tools">
-        <img class="plugin__icon" alt="" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPCEtLSDnurjlvKDvvJrmiZPljbDlt6XlnYrnmoTlrp7kvZPkuqfnianvvJvloqjnu7/lr7nlupTmj5Lku7bor4bliKvoibIgLS0+CiAgPHJlY3QgeD0iNCIgeT0iNCIgd2lkdGg9IjU2IiBoZWlnaHQ9IjU2IiByeD0iMTQiIGZpbGw9IiMxRjVDM0YiLz4KICA8cGF0aCBkPSJNMjAgMTRoMThsOCA4djI4YTIgMiAwIDAgMS0yIDJIMjBhMiAyIDAgMCAxLTItMlYxNmEyIDIgMCAwIDEgMi0yWiIgZmlsbD0iI2ZmZmRmNyIvPgogIDxwYXRoIGQ9Ik0zOCAxNGw4IDhoLTh2LThaIiBmaWxsPSIjY2ZlM2Q4Ii8+CiAgPHJlY3QgeD0iMjQiIHk9IjI3IiB3aWR0aD0iMTYiIGhlaWdodD0iMi42IiByeD0iMS4zIiBmaWxsPSIjMUY1QzNGIi8+CiAgPHJlY3QgeD0iMjQiIHk9IjMzIiB3aWR0aD0iMTYiIGhlaWdodD0iMi42IiByeD0iMS4zIiBmaWxsPSIjOWZiOGFjIi8+CiAgPHJlY3QgeD0iMjQiIHk9IjM5IiB3aWR0aD0iMTEiIGhlaWdodD0iMi42IiByeD0iMS4zIiBmaWxsPSIjOWZiOGFjIi8+CiAgPHJlY3QgeD0iMjQiIHk9IjQ1IiB3aWR0aD0iNyIgaGVpZ2h0PSIyLjYiIHJ4PSIxLjMiIGZpbGw9IiM5ZmI4YWMiLz4KPC9zdmc+Cg==" />
-        <div>
-          <div class="plugin__title">
-            <h3><span data-zh="打印工坊" data-en="Print Studio">打印工坊</span></h3>
-            <span class="ver">v0.2.1</span>
-          </div>
-          <div class="plugin__id"><span>@polunzh/dsh-doc</span>
-            <span class="dot" aria-hidden="true"></span>
-            <span data-zh="工具" data-en="Tools">工具</span>
-            <span class="dot" aria-hidden="true"></span>
-            <span data-zh="2026-11-08 更新" data-en="updated 2026-11-08">2026-11-08 更新</span>
-            <span class="dot" aria-hidden="true"></span>
-            <span data-zh="要求 DSH &gt;=0.2.0-rc.2" data-en="needs DSH &gt;=0.2.0-rc.2">要求 DSH &gt;=0.2.0-rc.2</span></div>
-          <p class="plugin__desc"><span data-zh="Word 式 A4 讲义编辑器：在真实纸面上排版，Ribbon 工具栏调字体、对齐与分栏；按需全屏预览分页与纸张校验，再按打印机实测的双面能力出纸并回报回执。" data-en="Word-style A4 editor for handouts: compose on a real paper sheet with a formatting ribbon, review full-size pagination and layout guards, then print duplex on a LAN printer and get a delivery receipt.">Word 式 A4 讲义编辑器：在真实纸面上排版，Ribbon 工具栏调字体、对齐与分栏；按需全屏预览分页与纸张校验，再按打印机实测的双面能力出纸并回报回执。</span></p>
-          <ul class="tags">
-            <li data-zh="中英双语" data-en="Bilingual">中英双语</li>
-            <li data-zh="纯本地" data-en="Local only">纯本地</li>
-          </ul>
-        </div>
-        <div class="plugin__acts">
-          <a class="lnk" href="https://github.com/polunzh/dsh-doc" target="_blank" rel="noopener"><span data-zh="源码" data-en="Source">源码</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 9 9 3M4.5 3H9v4.5"/></svg></a>
-          <a class="lnk" href="https://www.npmjs.com/package/@polunzh/dsh-doc" target="_blank" rel="noopener"><span>npm</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 9 9 3M4.5 3H9v4.5"/></svg></a>
-        </div>
-      </article>
-
-    <p class="plugin__hint"><span data-zh="新插件以同一格式登记在 plugins.json，构建时自动并进索引。" data-en="New plugins are registered in plugins.json in the same shape and merged into the index at build time.">新插件以同一格式登记在 plugins.json，构建时自动并进索引。</span></p>
+    <div id="chipSlot"><div class="chips"><button type="button" data-cat="*" aria-pressed="true"><span data-zh="全部" data-en="All">全部</span></button><button type="button" data-cat="interface" aria-pressed="false"><span data-zh="界面" data-en="Interface">界面</span></button><button type="button" data-cat="tools" aria-pressed="false"><span data-zh="工具" data-en="Tools">工具</span></button></div></div>
+    <div id="pluginList">
+<article class="plugin rise" style="--d:120ms" data-cat="interface" data-plugin="@polunzh/dsh-task-notifier" data-version="1.2.1"><img class="plugin__icon" alt="" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPCEtLSDpk4Ppk5vvvJrku7vliqHlrozmiJDnmoTpgJrnn6XmhJ/vvJvnlKjnuq/ok53ooajovr7jgIzku7vliqHpnaLmnb/jgI3ov5nkuKrlhaXlj6MgLS0+CiAgPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMjYiIGZpbGw9IiMyNDdiYmYiLz4KICA8cGF0aCBkPSJNMzIgMTdhMTEgMTEgMCAwIDEgMTEgMTF2Ni40YzAgMS42LjYgMy4xIDEuNyA0LjNsMi4xIDIuM2MuNy44LjEgMi0xIDJIMjAuMmMtMS4xIDAtMS43LTEuMi0xLTJsMi4xLTIuM2E2LjMgNi4zIDAgMCAwIDEuNy00LjNWMjhhMTEgMTEgMCAwIDEgMTEtMTFaIiBmaWxsPSIjZmZmZmZmIi8+CiAgPHBhdGggZD0iTTI3IDQ1aDEwYTUgNSAwIDAgMS0xMCAwWiIgZmlsbD0iI2ZmZmZmZiIvPgo8L3N2Zz4K" /><div><div class="plugin__title"><h3><span data-zh="任务通知台" data-en="Task Notifier">任务通知台</span></h3><span class="ver">v1.2.1</span></div><div class="plugin__id"><span>@polunzh/dsh-task-notifier</span><span class="dot" aria-hidden="true"></span><span data-zh="界面" data-en="Interface">界面</span><span class="dot" aria-hidden="true"></span><span data-zh="2026-11-08 更新" data-en="updated 2026-11-08">2026-11-08 更新</span><span class="dot" aria-hidden="true"></span><span data-zh="需要 DSH &gt;=0.2.0-rc.2" data-en="needs DSH &gt;=0.2.0-rc.2">需要 DSH &gt;=0.2.0-rc.2</span></div><p class="plugin__desc"><span data-zh="任务完成时响提示音并弹系统/浏览器通知；侧边栏「任务」面板可筛选已完成未读 / 运行中 / 已完成 / 全部，未读状态本地持久化。" data-en="Chime + system/browser notification when a task finishes, plus a Tasks sidebar panel filtering unread / running / completed sessions; unread state persists locally.">任务完成时响提示音并弹系统/浏览器通知；侧边栏「任务」面板可筛选已完成未读 / 运行中 / 已完成 / 全部，未读状态本地持久化。</span></p><ul class="tags"><li data-zh="macOS" data-en="macOS">macOS</li><li data-zh="中英双语" data-en="Bilingual">中英双语</li><li data-zh="纯本地" data-en="Local only">纯本地</li></ul></div><div class="plugin__acts"><a class="lnk" href="https://github.com/polunzh/dsh-task-notifier" target="_blank" rel="noopener"><span data-zh="源码" data-en="Source">源码</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 9 9 3M4.5 3H9v4.5"/></svg></a><a class="lnk" href="https://www.npmjs.com/package/@polunzh/dsh-task-notifier" target="_blank" rel="noopener"><span>npm</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 9 9 3M4.5 3H9v4.5"/></svg></a></div></article>
+<article class="plugin rise" style="--d:180ms" data-cat="tools" data-plugin="@polunzh/dsh-doc" data-version="0.2.1"><img class="plugin__icon" alt="" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPCEtLSDnurjlvKDvvJrmiZPljbDlt6XlnYrnmoTlrp7kvZPkuqfnianvvJvloqjnu7/lr7nlupTmj5Lku7bor4bliKvoibIgLS0+CiAgPHJlY3QgeD0iNCIgeT0iNCIgd2lkdGg9IjU2IiBoZWlnaHQ9IjU2IiByeD0iMTQiIGZpbGw9IiMxRjVDM0YiLz4KICA8cGF0aCBkPSJNMjAgMTRoMThsOCA4djI4YTIgMiAwIDAgMS0yIDJIMjBhMiAyIDAgMCAxLTItMlYxNmEyIDIgMCAwIDEgMi0yWiIgZmlsbD0iI2ZmZmRmNyIvPgogIDxwYXRoIGQ9Ik0zOCAxNGw4IDhoLTh2LThaIiBmaWxsPSIjY2ZlM2Q4Ii8+CiAgPHJlY3QgeD0iMjQiIHk9IjI3IiB3aWR0aD0iMTYiIGhlaWdodD0iMi42IiByeD0iMS4zIiBmaWxsPSIjMUY1QzNGIi8+CiAgPHJlY3QgeD0iMjQiIHk9IjMzIiB3aWR0aD0iMTYiIGhlaWdodD0iMi42IiByeD0iMS4zIiBmaWxsPSIjOWZiOGFjIi8+CiAgPHJlY3QgeD0iMjQiIHk9IjM5IiB3aWR0aD0iMTEiIGhlaWdodD0iMi42IiByeD0iMS4zIiBmaWxsPSIjOWZiOGFjIi8+CiAgPHJlY3QgeD0iMjQiIHk9IjQ1IiB3aWR0aD0iNyIgaGVpZ2h0PSIyLjYiIHJ4PSIxLjMiIGZpbGw9IiM5ZmI4YWMiLz4KPC9zdmc+Cg==" /><div><div class="plugin__title"><h3><span data-zh="打印工坊" data-en="Print Studio">打印工坊</span></h3><span class="ver">v0.2.1</span></div><div class="plugin__id"><span>@polunzh/dsh-doc</span><span class="dot" aria-hidden="true"></span><span data-zh="工具" data-en="Tools">工具</span><span class="dot" aria-hidden="true"></span><span data-zh="2026-11-08 更新" data-en="updated 2026-11-08">2026-11-08 更新</span><span class="dot" aria-hidden="true"></span><span data-zh="需要 DSH &gt;=0.2.0-rc.2" data-en="needs DSH &gt;=0.2.0-rc.2">需要 DSH &gt;=0.2.0-rc.2</span></div><p class="plugin__desc"><span data-zh="Word 式 A4 讲义编辑器：在真实纸面上排版，Ribbon 工具栏调字体、对齐与分栏；按需全屏预览分页与纸张校验，再按打印机实测的双面能力出纸并回报回执。" data-en="Word-style A4 editor for handouts: compose on a real paper sheet with a formatting ribbon, review full-size pagination and layout guards, then print duplex on a LAN printer and get a delivery receipt.">Word 式 A4 讲义编辑器：在真实纸面上排版，Ribbon 工具栏调字体、对齐与分栏；按需全屏预览分页与纸张校验，再按打印机实测的双面能力出纸并回报回执。</span></p><ul class="tags"><li data-zh="中英双语" data-en="Bilingual">中英双语</li><li data-zh="纯本地" data-en="Local only">纯本地</li></ul></div><div class="plugin__acts"><a class="lnk" href="https://github.com/polunzh/dsh-doc" target="_blank" rel="noopener"><span data-zh="源码" data-en="Source">源码</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 9 9 3M4.5 3H9v4.5"/></svg></a><a class="lnk" href="https://www.npmjs.com/package/@polunzh/dsh-doc" target="_blank" rel="noopener"><span>npm</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 9 9 3M4.5 3H9v4.5"/></svg></a></div></article>
+    </div>
   </section>
 
   <section class="install" id="install">
     <div class="sec__head">
       <h2 class="sec__title">
         <span class="sec__num">02</span>
-        <span class="sec__name"><span data-zh="装上它" data-en="Install">装上它</span></span>
+        <span class="sec__name"><span data-zh="开始使用" data-en="Getting started">开始使用</span></span>
       </h2>
-      <span class="sec__note"><span data-zh="DSH 的插件管理器负责真正的安装动作" data-en="DSH's plugin manager performs the actual install">DSH 的插件管理器负责真正的安装动作</span></span>
     </div>
 
     <ol class="steps">
       <li>
         <span class="steps__num">01</span>
-        <h3><span data-zh="打开自定义索引" data-en="Enable custom indexes">打开自定义索引</span></h3>
-        <p><span data-zh="DSH → 插件 → 实验性插件 → 启用「自定义插件索引」。" data-en="DSH → Plugins → Experimental plugins → enable Custom plugin indexes.">DSH → 插件 → 实验性插件 → 启用「自定义插件索引」。</span></p>
+        <h3><span data-zh="启用自定义索引" data-en="Enable custom indexes">启用自定义索引</span></h3>
+        <p><span data-zh="在 DSH 的「插件 → 实验性插件」里打开「自定义插件索引」。" data-en="Open Plugins → Experimental plugins in DSH and enable Custom plugin indexes.">在 DSH 的「插件 → 实验性插件」里打开「自定义插件索引」。</span></p>
       </li>
       <li>
         <span class="steps__num">02</span>
-        <h3><span data-zh="添加索引源" data-en="Add the index source">添加索引源</span></h3>
-        <p><span data-zh="插件 → 发现 → 添加索引源，粘贴上面的地址。" data-en="Plugins → Discover → Add index source, then paste the URL above.">插件 → 发现 → 添加索引源，粘贴上面的地址。</span></p>
+        <h3><span data-zh="添加索引地址" data-en="Add the index">添加索引地址</span></h3>
+        <p><span data-zh="进入「发现」，点「添加索引源」，粘贴上面的地址。" data-en="Open Discover, choose Add index source, and paste the URL above.">进入「发现」，点「添加索引源」，粘贴上面的地址。</span></p>
       </li>
       <li>
         <span class="steps__num">03</span>
-        <h3><span data-zh="浏览并安装" data-en="Browse and install">浏览并安装</span></h3>
-        <p><span data-zh="在「发现」里搜索或浏览，装的是 npm 上的真实包。" data-en="Search or browse in Discover; you install the real npm package.">在「发现」里搜索或浏览，装的是 npm 上的真实包。</span></p>
+        <h3><span data-zh="安装插件" data-en="Install">安装插件</span></h3>
+        <p><span data-zh="在「发现」里找到插件，点「安装」。" data-en="Find the plugin in Discover and choose Install.">在「发现」里找到插件，点「安装」。</span></p>
       </li>
     </ol>
 
-    <p class="install__foot">
-      <span><span data-zh="之后" data-en="Then">之后</span></span>
-      <span><span data-zh="有新版本时条目会标 update-available；卸载在「插件 → 已安装」里完成。" data-en="New versions are flagged update-available; uninstall from Plugins → Installed.">有新版本时条目会标 update-available；卸载在「插件 → 已安装」里完成。</span></span>
-    </p>
+    <p class="install__foot"><span data-zh="插件有新版本时，「发现」里的卡片会提示；卸载在「已安装」里完成。" data-en="Cards in Discover flag new versions; uninstall from Installed.">插件有新版本时，「发现」里的卡片会提示；卸载在「已安装」里完成。</span></p>
   </section>
 
 </main>
@@ -558,7 +499,7 @@ in one index.">我的 DSH 插件，
 <footer class="foot">
   <div class="wrap">
     <div class="foot__in">
-      <span><span data-zh="MIT 协议 · 索引不含任何跟踪与代码" data-en="MIT licensed · no tracking, no code in the index">MIT 协议 · 索引不含任何跟踪与代码</span></span>
+      <span><span data-zh="由 polunzh 维护 · MIT 协议" data-en="Maintained by polunzh · MIT">由 polunzh 维护 · MIT 协议</span></span>
       <div class="foot__links">
         <a href="https://github.com/polunzh/dsh-plugins-index" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.npmjs.com/~polunzh" target="_blank" rel="noopener">npm</a>
@@ -569,8 +510,131 @@ in one index.">我的 DSH 插件，
 </footer>
 
 <script>
+var PAGE = (function () {
+  var ARROW = '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 9 9 3M4.5 3H9v4.5"/></svg>';
+  var DOT = '<span class="dot" aria-hidden="true"></span>';
+
+  function text(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+  function attrs(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+  /* 双语节点：无 JS 时显示中文，切换语言时改写 */
+  function bi(tag, zh, en, extra) {
+    return '<' + tag + (extra || '') + ' data-zh="' + attrs(zh) + '" data-en="' + attrs(en) + '">' + text(zh) + '</' + tag + '>';
+  }
+  function day(seconds) {
+    return new Date(seconds * 1000).toISOString().slice(0, 10);
+  }
+
+  function normalize(index) {
+    var meta = index.metadata || {};
+    var categories = meta.categories || {};
+    var labels = meta.labels || {};
+    return (index.plugins || []).map(function (plugin) {
+      var versions = plugin.versions || [];
+      var latest = versions.length ? versions[versions.length - 1] : null;
+      var categoryId = (plugin.metadata && plugin.metadata.category) || '';
+      var category = categoryId && categories[categoryId] ? categories[categoryId].title : null;
+      var tags = ((plugin.metadata && plugin.metadata.labels) || []).map(function (id) {
+        return labels[id] ? labels[id].title : null;
+      }).filter(Boolean);
+      var repo = plugin.repository && plugin.repository.url ? plugin.repository.url : (plugin.repository || null);
+      return {
+        name: plugin.name,
+        title: plugin.title || { zh: plugin.name, en: plugin.name },
+        description: plugin.description || { zh: '', en: '' },
+        icon: plugin.icon || '',
+        latest: latest ? latest.version : null,
+        publishedAt: latest ? day(latest.publishTimestamp) : null,
+        enginesDsh: latest && latest.engines ? (latest.engines.dsh || null) : null,
+        categoryId: categoryId,
+        category: category,
+        tags: tags,
+        repoUrl: repo,
+        npmUrl: 'https://www.npmjs.com/package/' + plugin.name
+      };
+    });
+  }
+
+  function row(plugin, i, ui) {
+    var meta = ['<span>' + text(plugin.name) + '</span>'];
+    if (plugin.category) meta.push(DOT, bi('span', plugin.category.zh, plugin.category.en));
+    if (plugin.publishedAt) meta.push(DOT, bi('span', plugin.publishedAt + ' ' + ui.zh.updated, ui.en.updated + ' ' + plugin.publishedAt));
+    if (plugin.enginesDsh) meta.push(DOT, bi('span', ui.zh.requires + ' ' + plugin.enginesDsh, ui.en.requires + ' ' + plugin.enginesDsh));
+    var tags = plugin.tags.map(function (tag) { return bi('li', tag.zh, tag.en); });
+    var links = [];
+    if (plugin.repoUrl) {
+      links.push('<a class="lnk" href="' + attrs(plugin.repoUrl) + '" target="_blank" rel="noopener">' + bi('span', ui.zh.srcLink, ui.en.srcLink) + ARROW + '</a>');
+    }
+    links.push('<a class="lnk" href="' + attrs(plugin.npmUrl) + '" target="_blank" rel="noopener"><span>npm</span>' + ARROW + '</a>');
+
+    return '<article class="plugin rise" style="--d:' + (120 + i * 60) + 'ms"' +
+      ' data-cat="' + attrs(plugin.categoryId) + '"' +
+      ' data-plugin="' + attrs(plugin.name) + '"' +
+      ' data-version="' + attrs(plugin.latest) + '">' +
+        '<img class="plugin__icon" alt="" src="' + attrs(plugin.icon) + '" />' +
+        '<div>' +
+          '<div class="plugin__title">' +
+            '<h3>' + bi('span', plugin.title.zh, plugin.title.en) + '</h3>' +
+            (plugin.latest ? '<span class="ver">v' + text(plugin.latest) + '</span>' : '') +
+          '</div>' +
+          '<div class="plugin__id">' + meta.join('') + '</div>' +
+          '<p class="plugin__desc">' + bi('span', plugin.description.zh, plugin.description.en) + '</p>' +
+          (tags.length ? '<ul class="tags">' + tags.join('') + '</ul>' : '') +
+        '</div>' +
+        '<div class="plugin__acts">' + links.join('') + '</div>' +
+      '</article>';
+  }
+
+  function chips(plugins, ui) {
+    var seen = {};
+    var order = [];
+    plugins.forEach(function (plugin) {
+      if (plugin.categoryId && plugin.category && !seen[plugin.categoryId]) {
+        seen[plugin.categoryId] = plugin.category;
+        order.push(plugin.categoryId);
+      }
+    });
+    if (plugins.length < 2 || order.length < 2) return '';
+    var out = ['<button type="button" data-cat="*" aria-pressed="true">' + bi('span', ui.zh.all, ui.en.all) + '</button>'];
+    order.forEach(function (id) {
+      out.push('<button type="button" data-cat="' + attrs(id) + '" aria-pressed="false">' + bi('span', seen[id].zh, seen[id].en) + '</button>');
+    });
+    return '<div class="chips">' + out.join('') + '</div>';
+  }
+
+  function fingerprint(plugins) {
+    return plugins.map(function (plugin) {
+      return [
+        plugin.name, plugin.latest, plugin.publishedAt, plugin.enginesDsh, plugin.categoryId,
+        plugin.title.zh, plugin.title.en, plugin.description.zh, plugin.description.en
+      ].join('|');
+    }).join('\n');
+  }
+
+  function hash(value) {
+    var h = 5381;
+    for (var i = 0; i < value.length; i++) h = ((h * 33) ^ value.charCodeAt(i)) >>> 0;
+    return h.toString(36);
+  }
+
+  return { normalize: normalize, row: row, chips: chips, fingerprint: fingerprint, hash: hash };
+})();
+
+var PAGE_UI = {"zh":{"navPlugins":"插件","navInstall":"开始使用","sourceCap":"索引地址","copy":"复制","fallback":"备用地址","glance":"索引概况","pluginsTitle":"插件","pluginsRow":"插件","lastPublish":"最近更新","categoryRow":"分类","enginesRow":"DSH 版本","sourceRow":"来源","pluginsNote":"共 {n} 个","all":"全部","updated":"更新","requires":"需要 DSH","srcLink":"源码","installTitle":"开始使用","thenText":"插件有新版本时，「发现」里的卡片会提示；卸载在「已安装」里完成。","footNote":"由 polunzh 维护 · MIT 协议","community":"社区市场"},"en":{"navPlugins":"Plugins","navInstall":"Getting started","sourceCap":"Index URL","copy":"Copy","fallback":"Backup","glance":"Overview","pluginsTitle":"Plugins","pluginsRow":"Plugins","lastPublish":"Updated","categoryRow":"Categories","enginesRow":"DSH version","sourceRow":"Source","pluginsNote":"{n} total","all":"All","updated":"updated","requires":"needs DSH","srcLink":"Source","installTitle":"Getting started","thenText":"Cards in Discover flag new versions; uninstall from Installed.","footNote":"Maintained by polunzh · MIT","community":"Community market"}};
+
   (function () {
     var root = document.documentElement;
+    var UI = PAGE_UI;
     var store = {
       get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
       set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -643,7 +707,7 @@ in one index.">我的 DSH 插件，
 
     copyBtn.addEventListener('click', function () {
       var text = urlEl.textContent.trim();
-      flash('done'); // 先给反馈，失败再改口
+      flash('done'); /* 先给反馈，失败再改口 */
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).catch(function () {
           if (!legacyCopy(text)) flash('failed');
@@ -654,23 +718,58 @@ in one index.">我的 DSH 插件，
     });
 
     /* ── 分类筛选 ── */
-    var chips = document.querySelectorAll('.chips button');
-    for (var c = 0; c < chips.length; c++) {
-      chips[c].addEventListener('click', function (event) {
-        var chip = event.currentTarget;
-        var wanted = chip.getAttribute('data-cat');
-        for (var i = 0; i < chips.length; i++) chips[i].setAttribute('aria-pressed', String(chips[i] === chip));
-        var rows = document.querySelectorAll('.plugin');
-        for (var j = 0; j < rows.length; j++) {
-          var match = wanted === '*' || rows[j].getAttribute('data-cat') === wanted;
-          if (match) rows[j].removeAttribute('hidden');
-          else rows[j].setAttribute('hidden', '');
-        }
-      });
+    function bindChips() {
+      var chips = document.querySelectorAll('#chipSlot button');
+      for (var c = 0; c < chips.length; c++) {
+        chips[c].addEventListener('click', function (event) {
+          var chip = event.currentTarget;
+          var wanted = chip.getAttribute('data-cat');
+          var all = document.querySelectorAll('#chipSlot button');
+          for (var i = 0; i < all.length; i++) all[i].setAttribute('aria-pressed', String(all[i] === chip));
+          var rows = document.querySelectorAll('.plugin');
+          for (var j = 0; j < rows.length; j++) {
+            var match = wanted === '*' || rows[j].getAttribute('data-cat') === wanted;
+            if (match) rows[j].removeAttribute('hidden');
+            else rows[j].setAttribute('hidden', '');
+          }
+        });
+      }
+    }
+
+    /* ── 用索引里的最新数据重绘（索引更新后无需重建页面） ── */
+    function render(list) {
+      var host = document.getElementById('pluginList');
+      if (host) host.innerHTML = list.map(function (plugin, i) { return PAGE.row(plugin, i, UI); }).join('\n');
+      var slot = document.getElementById('chipSlot');
+      if (slot) slot.innerHTML = PAGE.chips(list, UI);
+      var count = document.getElementById('pluginCount');
+      if (count) count.textContent = String(list.length);
+      var last = document.getElementById('lastPublish');
+      if (last) {
+        var dates = list.map(function (plugin) { return plugin.publishedAt; }).filter(Boolean).sort();
+        if (dates.length) last.textContent = dates[dates.length - 1];
+      }
+      bindChips();
+      applyLang(lang);
     }
 
     langBtn.addEventListener('click', function () { applyLang(lang === 'zh' ? 'en' : 'zh'); });
     applyLang(lang);
+    bindChips();
+
+    var main = document.querySelector('main');
+    var built = main ? main.getAttribute('data-fp') : null;
+    if (built && window.fetch && location.protocol !== 'file:') {
+      fetch('index.json', { credentials: 'omit' })
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (data) {
+          if (!data || !data.plugins) return;
+          var list = PAGE.normalize(data);
+          if (PAGE.hash(PAGE.fingerprint(list)) === built) return;
+          render(list);
+        })
+        .catch(function () {});
+    }
   })();
 </script>
 </body>

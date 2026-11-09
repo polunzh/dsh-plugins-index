@@ -38,7 +38,7 @@ Fallback URL, same content: `https://raw.githubusercontent.com/polunzh/dsh-plugi
 
 - Sources: `plugins.json` (hand-maintained metadata) + the **npm registry** (versions, publish timestamps, `engines.dsh`)
 - `scripts/build-index.mjs` writes `index.json` and validates it with the official validator `@deepseek-ai/dsh-plugin-market-index`; nothing is written if validation fails
-- `scripts/build-page.mjs` turns `index.json` + `site.json` into a single self-contained `dist/index.html` (CSS, JS and icons inlined, no external requests)
+- `scripts/build-page.mjs` turns `index.json` + `site.json` into a single self-contained `dist/index.html` (CSS, JS and icons inlined, no external requests). The page also re-reads `/index.json` on load, so an index refresh shows up without rebuilding it
 - GitHub Actions runs every 6 hours and commits only when something changed; `workflow_dispatch` is available too
 - Net effect: **publish a new npm version → it appears in the index and on the page within 6 hours**
 

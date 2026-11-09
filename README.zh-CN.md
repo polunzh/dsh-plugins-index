@@ -38,7 +38,7 @@ https://dsh.127.dev/index.json
 
 - 数据源：`plugins.json`（人工维护元数据）+ **npm registry**（版本号、发布时间、`engines.dsh`）
 - `scripts/build-index.mjs` 生成 `index.json`，**先过官方校验器** `@deepseek-ai/dsh-plugin-market-index`，失败不写文件
-- `scripts/build-page.mjs` 把 `index.json` + `site.json` 编成单文件自包含的 `dist/index.html`（CSS、JS、图标全部内联，不发任何外部请求）
+- `scripts/build-page.mjs` 把 `index.json` + `site.json` 编成单文件自包含的 `dist/index.html`（CSS、JS、图标全部内联，不发任何外部请求）；页面加载时还会再读一次 `/index.json`，所以索引刷新后不用重建页面
 - GitHub Actions 每 6 小时跑一次，只有内容变化才提交；也可以手动 `workflow_dispatch`
 - 因此：**发 npm 新版本 → 最迟 6 小时自动出现在索引和落地页里**
 
