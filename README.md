@@ -24,9 +24,9 @@ Fallback URL, same content: `https://raw.githubusercontent.com/polunzh/dsh-plugi
 
 ## How to use
 
-1. DSH → **Plugins** → **Experimental plugins** → enable **Custom plugin markets**
+1. DSH → **Plugins** → **Experimental plugins** → enable **Custom plugin indexes**
 2. **Plugins** → **Discover** → **Add index source** → paste the URL above
-3. Search or browse in Discover → install
+3. Search or browse in Discover → **Install**
 4. Afterwards:
    - **Update**: when a new version exists the entry shows `update-available` (this index refreshes from npm every 6 hours)
    - **Uninstall**: **Plugins** → **Installed** → the plugin → uninstall

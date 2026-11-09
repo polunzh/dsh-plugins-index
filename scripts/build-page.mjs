@@ -630,8 +630,8 @@ const UI = {
 /** 安装步骤（描述的是 DSH 界面，与具体插件无关）。 */
 const STEPS = [
   {
-    zh: { title: "打开自定义市场", body: "DSH → 插件 → 实验性插件 → 打开「自定义插件市场」。" },
-    en: { title: "Enable custom markets", body: "DSH → Plugins → Experimental plugins → enable Custom plugin markets." },
+    zh: { title: "打开自定义索引", body: "DSH → 插件 → 实验性插件 → 启用「自定义插件索引」。" },
+    en: { title: "Enable custom indexes", body: "DSH → Plugins → Experimental plugins → enable Custom plugin indexes." },
   },
   {
     zh: { title: "添加索引源", body: "插件 → 发现 → 添加索引源，粘贴上面的地址。" },
