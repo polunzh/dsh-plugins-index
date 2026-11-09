@@ -26,6 +26,7 @@ Each plugin also has its own page — screenshots, weekly downloads, install pat
 |---|---|---|
 | **Task Notifier** · [`@polunzh/dsh-task-notifier`](https://www.npmjs.com/package/@polunzh/dsh-task-notifier) | Chime + system/browser notification when a task finishes, plus a Tasks sidebar panel filtering unread / running / completed sessions; unread state persists locally. Bilingual, no network access. [Source](https://github.com/polunzh/dsh-task-notifier) | 1.2.1 (`index.json` is authoritative) |
 | **Print Studio** · [`@polunzh/dsh-doc`](https://www.npmjs.com/package/@polunzh/dsh-doc) | Word-style A4 editor for handouts: compose on a real paper sheet with a formatting ribbon, review full-size pagination and layout guards, then print duplex on a LAN printer and get a delivery receipt. Bilingual, renders and prints locally. [Source](https://github.com/polunzh/dsh-doc) | 0.2.1 (`index.json` is authoritative) |
+| **To-do & Pomodoro** · [`@polunzh/dsh-todo`](https://www.npmjs.com/package/@polunzh/dsh-todo) | Todoist-style Today / Upcoming / Inbox / project views plus a TickTick-style task pomodoro; a second-precision countdown on the sidebar and an agent `todo` tool over the same store. Bilingual, local JSON storage. [Source](https://github.com/polunzh/dsh-todo) | 0.1.2 (`index.json` is authoritative) |
 
 ## How to use
 

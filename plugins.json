@@ -211,6 +211,90 @@
           }
         ]
       }
+    },
+    {
+      "name": "@polunzh/dsh-todo",
+      "author": "polunzh",
+      "icon": "icons/dsh-todo.svg",
+      "category": "interface",
+      "keywords": [
+        "todo",
+        "task",
+        "pomodoro",
+        "calendar",
+        "sidebar",
+        "productivity"
+      ],
+      "labels": [
+        "bilingual",
+        "local-only"
+      ],
+      "sortKeys": {
+        "added": 3
+      },
+      "homepage": "https://github.com/polunzh/dsh-todo#readme",
+      "repository": "https://github.com/polunzh/dsh-todo",
+      "title": {
+        "en": "To-do & Pomodoro",
+        "zh": "待办与番茄钟"
+      },
+      "description": {
+        "en": "Todoist-style Today / Upcoming / Inbox / project views plus a TickTick-style pomodoro bound to tasks, with a sidebar entry, a live countdown on the sidebar row and an agent tool over the same task store.",
+        "zh": "Todoist 式的今天 / 即将到来 / 收件箱 / 项目视图，配 TickTick 式的任务番茄钟；侧边栏入口与秒级倒计时，智能体也通过同一个 `todo` 工具读写这份任务。"
+      },
+      "detail": {
+        "license": "MIT",
+        "features": {
+          "zh": [
+            "今天、即将到来、收件箱、已完成与项目视图，逾期和今天分组显示",
+            "任务可设截止时间、优先级、标签、子任务与重复规则",
+            "番茄钟绑定任务，专注结束自动累计，休息在侧边栏带模式名显示",
+            "日历视图按月查看任务，点选日期查看当天安排",
+            "对话页输入框下方常驻计时条，不打开面板也能控制番茄钟",
+            "智能体通过 `todo` 工具读写同一份任务库",
+            "中英双语、深色模式，任务存本机 JSON"
+          ],
+          "en": [
+            "Today, Upcoming, Inbox, Completed and per-project views, with overdue and today grouped apart",
+            "Due date/time, priority, labels, subtasks and recurrence on every task",
+            "Pomodoro bound to a task; finished focuses count automatically and breaks show on the sidebar with their mode name",
+            "Calendar view for the month; click a day to see its tasks",
+            "A timer dock under the composer, so the pomodoro is controllable without opening the panel",
+            "An agent `todo` tool that reads and writes the same task store",
+            "Bilingual, dark-mode aware, tasks stored as local JSON"
+          ]
+        },
+        "screenshots": [
+          {
+            "src": "assets/shots/dsh-todo/panel.webp",
+            "w": 1600,
+            "h": 1000,
+            "zh": "今天视图：逾期与今天分组，带优先级和截止时间",
+            "en": "Today view: overdue and today grouped apart, with priority and due times"
+          },
+          {
+            "src": "assets/shots/dsh-todo/pomodoro.webp",
+            "w": 1600,
+            "h": 1000,
+            "zh": "番茄钟：环形进度、绑定任务与近 7 天统计",
+            "en": "Pomodoro: ring progress, a bound task and a 7-day stats chart"
+          },
+          {
+            "src": "assets/shots/dsh-todo/sidebar-break.webp",
+            "w": 1600,
+            "h": 1000,
+            "zh": "侧边栏倒计时：休息带模式名，蓝色和专注区分",
+            "en": "Sidebar countdown: breaks carry a mode label and are tinted blue"
+          },
+          {
+            "src": "assets/shots/dsh-todo/panel-en.webp",
+            "w": 1600,
+            "h": 1000,
+            "zh": "英文界面，所有文案随语言切换",
+            "en": "English interface; every string follows the app language"
+          }
+        ]
+      }
     }
   ]
 }
