@@ -261,6 +261,17 @@
           "engines": {
             "dsh": ">=0.2.0-rc.2"
           }
+        },
+        {
+          "version": "0.2.2",
+          "publishTimestamp": 1794194946,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2"
+          }
         }
       ]
     }
