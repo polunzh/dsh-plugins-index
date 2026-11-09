@@ -175,6 +175,94 @@
           }
         }
       ]
+    },
+    {
+      "name": "@polunzh/dsh-doc",
+      "title": {
+        "en": "Print Studio",
+        "zh": "打印工坊"
+      },
+      "description": {
+        "en": "Word-style A4 editor for handouts: compose on a real paper sheet with a formatting ribbon, review full-size pagination and layout guards, then print duplex on a LAN printer and get a delivery receipt.",
+        "zh": "Word 式 A4 讲义编辑器：在真实纸面上排版，Ribbon 工具栏调字体、对齐与分栏；按需全屏预览分页与纸张校验，再按打印机实测的双面能力出纸并回报回执。"
+      },
+      "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPCEtLSDnurjlvKDvvJrmiZPljbDlt6XlnYrnmoTlrp7kvZPkuqfnianvvJvloqjnu7/lr7nlupTmj5Lku7bor4bliKvoibIgLS0+CiAgPHJlY3QgeD0iNCIgeT0iNCIgd2lkdGg9IjU2IiBoZWlnaHQ9IjU2IiByeD0iMTQiIGZpbGw9IiMxRjVDM0YiLz4KICA8cGF0aCBkPSJNMjAgMTRoMThsOCA4djI4YTIgMiAwIDAgMS0yIDJIMjBhMiAyIDAgMCAxLTItMlYxNmEyIDIgMCAwIDEgMi0yWiIgZmlsbD0iI2ZmZmRmNyIvPgogIDxwYXRoIGQ9Ik0zOCAxNGw4IDhoLTh2LThaIiBmaWxsPSIjY2ZlM2Q4Ii8+CiAgPHJlY3QgeD0iMjQiIHk9IjI3IiB3aWR0aD0iMTYiIGhlaWdodD0iMi42IiByeD0iMS4zIiBmaWxsPSIjMUY1QzNGIi8+CiAgPHJlY3QgeD0iMjQiIHk9IjMzIiB3aWR0aD0iMTYiIGhlaWdodD0iMi42IiByeD0iMS4zIiBmaWxsPSIjOWZiOGFjIi8+CiAgPHJlY3QgeD0iMjQiIHk9IjM5IiB3aWR0aD0iMTEiIGhlaWdodD0iMi42IiByeD0iMS4zIiBmaWxsPSIjOWZiOGFjIi8+CiAgPHJlY3QgeD0iMjQiIHk9IjQ1IiB3aWR0aD0iNyIgaGVpZ2h0PSIyLjYiIHJ4PSIxLjMiIGZpbGw9IiM5ZmI4YWMiLz4KPC9zdmc+Cg==",
+      "author": "polunzh",
+      "homepage": "https://github.com/polunzh/dsh-doc#readme",
+      "repository": {
+        "url": "https://github.com/polunzh/dsh-doc"
+      },
+      "metadata": {
+        "category": "tools",
+        "keywords": [
+          "print",
+          "pdf",
+          "a4",
+          "handout",
+          "editor",
+          "markdown",
+          "duplex",
+          "cups"
+        ],
+        "labels": [
+          "bilingual",
+          "local-only"
+        ],
+        "sortKeys": {
+          "added": 2
+        }
+      },
+      "versions": [
+        {
+          "version": "0.1.0",
+          "publishTimestamp": 1794129988,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          }
+        },
+        {
+          "version": "0.1.1",
+          "publishTimestamp": 1794130348,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          }
+        },
+        {
+          "version": "0.1.2",
+          "publishTimestamp": 1794133011,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2"
+          }
+        },
+        {
+          "version": "0.2.0",
+          "publishTimestamp": 1794156492,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2"
+          }
+        },
+        {
+          "version": "0.2.1",
+          "publishTimestamp": 1794158166,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2"
+          }
+        }
+      ]
     }
   ]
 }

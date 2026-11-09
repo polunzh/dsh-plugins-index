@@ -21,6 +21,7 @@ https://dsh.127.dev/index.json
 | 插件 | 说明 | 最新版 |
 |---|---|---|
 | **任务通知台** · [`@polunzh/dsh-task-notifier`](https://www.npmjs.com/package/@polunzh/dsh-task-notifier) | 任务完成时响提示音并弹系统/浏览器通知；侧边栏「任务」面板可筛选已完成未读 / 运行中 / 已完成 / 全部，未读状态本地持久化。中英双语，纯本地不联网。[源码](https://github.com/polunzh/dsh-task-notifier) | 1.2.1（以 `index.json` 为准） |
+| **打印工坊** · [`@polunzh/dsh-doc`](https://www.npmjs.com/package/@polunzh/dsh-doc) | Word 式 A4 讲义编辑器：在真实纸面上排版，Ribbon 工具栏调字体、对齐与分栏；按需全屏预览分页与纸张校验，再按打印机实测的双面能力出纸并回报回执。中英双语，本地渲染打印。[源码](https://github.com/polunzh/dsh-doc) | 0.2.1（以 `index.json` 为准） |
 
 ## 怎么用
 

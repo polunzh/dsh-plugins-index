@@ -21,6 +21,7 @@ Fallback URL, same content: `https://raw.githubusercontent.com/polunzh/dsh-plugi
 | Plugin | What it does | Latest |
 |---|---|---|
 | **Task Notifier** · [`@polunzh/dsh-task-notifier`](https://www.npmjs.com/package/@polunzh/dsh-task-notifier) | Chime + system/browser notification when a task finishes, plus a Tasks sidebar panel filtering unread / running / completed sessions; unread state persists locally. Bilingual, no network access. [Source](https://github.com/polunzh/dsh-task-notifier) | 1.2.1 (`index.json` is authoritative) |
+| **Print Studio** · [`@polunzh/dsh-doc`](https://www.npmjs.com/package/@polunzh/dsh-doc) | Word-style A4 editor for handouts: compose on a real paper sheet with a formatting ribbon, review full-size pagination and layout guards, then print duplex on a LAN printer and get a delivery receipt. Bilingual, renders and prints locally. [Source](https://github.com/polunzh/dsh-doc) | 0.2.1 (`index.json` is authoritative) |
 
 ## How to use
 

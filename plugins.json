@@ -47,6 +47,25 @@
         "en": "Chime + system/browser notification when a task finishes, plus a Tasks sidebar panel filtering unread / running / completed sessions; unread state persists locally.",
         "zh": "任务完成时响提示音并弹系统/浏览器通知；侧边栏「任务」面板可筛选已完成未读 / 运行中 / 已完成 / 全部，未读状态本地持久化。"
       }
+    },
+    {
+      "name": "@polunzh/dsh-doc",
+      "author": "polunzh",
+      "icon": "icons/print-studio.svg",
+      "category": "tools",
+      "keywords": ["print", "pdf", "a4", "handout", "editor", "markdown", "duplex", "cups"],
+      "labels": ["bilingual", "local-only"],
+      "sortKeys": { "added": 2 },
+      "homepage": "https://github.com/polunzh/dsh-doc#readme",
+      "repository": "https://github.com/polunzh/dsh-doc",
+      "title": {
+        "en": "Print Studio",
+        "zh": "打印工坊"
+      },
+      "description": {
+        "en": "Word-style A4 editor for handouts: compose on a real paper sheet with a formatting ribbon, review full-size pagination and layout guards, then print duplex on a LAN printer and get a delivery receipt.",
+        "zh": "Word 式 A4 讲义编辑器：在真实纸面上排版，Ribbon 工具栏调字体、对齐与分栏；按需全屏预览分页与纸张校验，再按打印机实测的双面能力出纸并回报回执。"
+      }
     }
   ]
 }
