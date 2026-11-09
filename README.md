@@ -16,6 +16,10 @@ Fallback URL, same content: `https://raw.githubusercontent.com/polunzh/dsh-plugi
 
 ![Landing page](docs/images/preview-en.png)
 
+Each plugin also has its own page — screenshots, weekly downloads, install paths and the full version history:
+
+![Plugin detail](docs/images/detail-en.png)
+
 ## Plugins
 
 | Plugin | What it does | Latest |
@@ -39,6 +43,7 @@ Fallback URL, same content: `https://raw.githubusercontent.com/polunzh/dsh-plugi
 - Sources: `plugins.json` (hand-maintained metadata) + the **npm registry** (versions, publish timestamps, `engines.dsh`)
 - `scripts/build-index.mjs` writes `index.json` and validates it with the official validator `@deepseek-ai/dsh-plugin-market-index`; nothing is written if validation fails
 - `scripts/build-page.mjs` turns `index.json` + `site.json` into a single self-contained `dist/index.html` (CSS, JS and icons inlined, no external requests). The page also re-reads `/index.json` on load, so an index refresh shows up without rebuilding it
+- `npm run build` also asks the npm downloads API for each plugin's weekly downloads, so the detail pages carry a number even without JavaScript
 - GitHub Actions runs every 6 hours and commits only when something changed; `workflow_dispatch` is available too
 - Net effect: **publish a new npm version → it appears in the index and on the page within 6 hours**
 
@@ -46,8 +51,10 @@ Fallback URL, same content: `https://raw.githubusercontent.com/polunzh/dsh-plugi
 
 `https://dsh.127.dev/` is served by the Cloudflare Worker in this repo (`worker/index.js` + `wrangler.toml`):
 
-- `/` or `/index.html` → the landing page
+- `/` or `/index.html` → the landing page (plugin detail pages are client-side routes, `#/plugin/<slug>`)
 - `/index.json` → the market index
+- `/assets/*` → screenshots, favicons (7-day edge cache)
+- `/api/downloads?pkg=…` → npm weekly downloads, proxied and cached for an hour
 - anything else → 404
 
 Both are read from GitHub per request and cached at the edge for 5 minutes. Refreshing the index or the page needs no Worker redeploy; `npx wrangler deploy` is only needed when the Worker code changes.
@@ -83,7 +90,19 @@ The page also takes `?lang=en|zh` and `?theme=light|dark` for quick previews of 
 }
 ```
 
-3. `npm run build` → commit `plugins.json`, the icon, `index.json` and `dist/index.html`
+3. Optional but recommended: give the plugin a detail page by adding a `detail` block to its entry — `license`, bilingual `features`, and `screenshots` pointing at files under `assets/shots/<slug>/` (WebP, ~1400 px wide, with width/height and a bilingual caption):
+
+```json
+"detail": {
+  "license": "MIT",
+  "features": { "en": ["…"], "zh": ["…"] },
+  "screenshots": [
+    { "src": "assets/shots/your-plugin/panel.webp", "w": 1400, "h": 875, "en": "…", "zh": "…" }
+  ]
+}
+```
+
+4. `npm run build` → commit `plugins.json`, the icon, any screenshots, `index.json` and `dist/index.html`
 
 Constraints (enforced by the official format 1 validator during the build):
 `name` must be a valid npm package name; `versions` must be non-empty with exact SemVer versions and Unix-second publish timestamps;

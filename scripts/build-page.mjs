@@ -65,6 +65,24 @@ function refreshHours(workflowText) {
   return every ? Number(every[1]) : null;
 }
 
+/** `@polunzh/dsh-doc` → `dsh-doc`，详情页的 URL 片段。 */
+const slugOf = (name) => name.split("/").pop();
+
+/**
+ * npm 周下载量。取不到（新包还没有统计、网络失败）就返回 null，页面自然不显示这一项。
+ */
+async function fetchWeeklyDownloads(name) {
+  const url = `https://api.npmjs.org/downloads/point/last-week/${name}`;
+  try {
+    const response = await fetch(url, { signal: AbortSignal.timeout(10_000) });
+    if (!response.ok) return null;
+    const body = await response.json();
+    return typeof body.downloads === "number" ? body.downloads : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * 数据整形与条目渲染，构建期与浏览器共用同一份实现：
  * 构建时用 new Function 求值，运行时原样内联进页面。
@@ -111,6 +129,7 @@ var PAGE = (function () {
       var repo = plugin.repository && plugin.repository.url ? plugin.repository.url : (plugin.repository || null);
       return {
         name: plugin.name,
+        slug: plugin.name.split('/').pop(),
         title: plugin.title || { zh: plugin.name, en: plugin.name },
         description: plugin.description || { zh: '', en: '' },
         icon: plugin.icon || '',
@@ -121,6 +140,13 @@ var PAGE = (function () {
         category: category,
         tags: tags,
         repoUrl: repo,
+        versions: versions.slice().reverse().map(function (version) {
+          return {
+            version: version.version,
+            publishedAt: day(version.publishTimestamp),
+            enginesDsh: version.engines ? (version.engines.dsh || null) : null
+          };
+        }),
         npmUrl: 'https://www.npmjs.com/package/' + plugin.name
       };
     });
@@ -142,6 +168,7 @@ var PAGE = (function () {
       ' data-cat="' + attrs(plugin.categoryId) + '"' +
       ' data-plugin="' + attrs(plugin.name) + '"' +
       ' data-version="' + attrs(plugin.latest) + '">' +
+        '<a class="plugin__overlay" href="#/plugin/' + attrs(plugin.slug) + '" aria-label="' + attrs(plugin.title.zh + ' / ' + plugin.title.en) + '"></a>' +
         '<img class="plugin__icon" alt="" src="' + attrs(plugin.icon) + '" />' +
         '<div>' +
           '<div class="plugin__title">' +
@@ -154,6 +181,127 @@ var PAGE = (function () {
         '</div>' +
         '<div class="plugin__acts">' + links.join('') + '</div>' +
       '</article>';
+  }
+
+  /* 1234 → 1.2k */
+  function formatCount(value) {
+    if (value == null) return null;
+    if (value < 1000) return String(value);
+    var k = value / 1000;
+    return (k >= 100 ? String(Math.round(k)) : String(Math.round(k * 10) / 10)) + 'k';
+  }
+
+  function copyButton(value, labelZh, labelEn) {
+    return '<button type="button" class="copy copy--sm" data-copy="' + attrs(value) + '"' +
+      ' data-zh="' + attrs(labelZh) + '" data-en="' + attrs(labelEn) + '">' + text(labelZh) + '</button>';
+  }
+
+  function cmd(value, labelZh, labelEn) {
+    return '<div class="cmd"><code>' + text(value) + '</code>' + copyButton(value, labelZh, labelEn) + '</div>';
+  }
+
+  /* 详情页整页内容。detail 来自 plugins.json，缺失时优雅降级 */
+  function detailHtml(plugin, detail, copy, indexUrl) {
+    var d = detail || {};
+    var features = d.features || {};
+    var shots = (d.screenshots || []).map(function (shot, i) {
+      var narrow = shot.h > shot.w ? ' shot--narrow' : '';
+      return '<figure class="shot' + narrow + '">' +
+        '<a href="/' + attrs(shot.src) + '" target="_blank" rel="noopener">' +
+          '<img src="/' + attrs(shot.src) + '" width="' + attrs(shot.w) + '" height="' + attrs(shot.h) + '"' +
+            ' loading="' + (i === 0 ? 'eager' : 'lazy') + '" decoding="async" alt="' + attrs(shot.zh) + '" />' +
+        '</a>' +
+        '<figcaption>' + bi('span', shot.zh, shot.en) + '</figcaption>' +
+      '</figure>';
+    }).join('');
+
+    var bullets = [];
+    var zhFeatures = features.zh || [];
+    var enFeatures = features.en || [];
+    for (var i = 0; i < zhFeatures.length; i++) {
+      bullets.push('<li>' + bi('span', zhFeatures[i], enFeatures[i] || zhFeatures[i]) + '</li>');
+    }
+
+    var versions = plugin.versions || [];
+    var versionRows = versions.map(function (version, index) {
+      return '<tr>' +
+        '<td class="mono">v' + text(version.version) + (index === 0 ? ' <span class="ver">' + bi('span', copy.latestChip.zh, copy.latestChip.en) + '</span>' : '') + '</td>' +
+        '<td class="mono">' + text(version.publishedAt) + '</td>' +
+        '<td class="mono">' + text(version.enginesDsh || '—') + '</td>' +
+      '</tr>';
+    }).join('');
+
+    var downloads = typeof d.downloads === 'number' ? formatCount(d.downloads) : (d.downloads || null);
+    var metrics = [
+      downloads
+        ? '<div class="metric"><dt>' + bi('span', copy.weekly.zh, copy.weekly.en) + '</dt>' +
+            '<dd data-downloads="' + attrs(plugin.name) + '">' + text(downloads) + '</dd></div>'
+        : '',
+      '<div class="metric"><dt>' + bi('span', copy.updated.zh, copy.updated.en) + '</dt><dd class="mono">' + text(plugin.publishedAt || '—') + '</dd></div>',
+      '<div class="metric"><dt>DSH</dt><dd class="mono">' + text(plugin.enginesDsh || '—') + '</dd></div>',
+      '<div class="metric"><dt>' + bi('span', copy.license.zh, copy.license.en) + '</dt><dd class="mono">' + text(d.license || '—') + '</dd></div>',
+    ].filter(Boolean).join('');
+
+    var cliProfile = 'desktop';
+    var cli = 'dsh plugin --profile ' + cliProfile + ' add ' + plugin.name;
+
+    return '' +
+      '<nav class="crumb"><a href="#/">' + bi('span', copy.back.zh, copy.back.en) + '</a></nav>' +
+
+      '<header class="dhead">' +
+        '<img class="dhead__icon" src="' + attrs(plugin.icon) + '" alt="" />' +
+        '<div class="dhead__body">' +
+          '<div class="dhead__title"><h1>' + bi('span', plugin.title.zh, plugin.title.en) + '</h1>' +
+            (plugin.latest ? '<span class="ver ver--lg">v' + text(plugin.latest) + '</span>' : '') + '</div>' +
+          '<p class="dhead__id"><span>' + text(plugin.name) + '</span>' +
+            (plugin.category ? DOT + bi('span', plugin.category.zh, plugin.category.en) : '') +
+            (plugin.tags.length ? plugin.tags.map(function (tag) {
+              return DOT + bi('span', tag.zh, tag.en);
+            }).join('') : '') +
+          '</p>' +
+          '<p class="dhead__desc">' + bi('span', plugin.description.zh, plugin.description.en) + '</p>' +
+          '<div class="dhead__acts">' +
+            (plugin.repoUrl ? '<a class="lnk" href="' + attrs(plugin.repoUrl) + '" target="_blank" rel="noopener">' + bi('span', copy.source.zh, copy.source.en) + ARROW + '</a>' : '') +
+            '<a class="lnk" href="' + attrs(plugin.npmUrl) + '" target="_blank" rel="noopener"><span>npm</span>' + ARROW + '</a>' +
+          '</div>' +
+        '</div>' +
+      '</header>' +
+
+      '<dl class="metrics">' + metrics + '</dl>' +
+
+      (shots ? '<section class="dsec"><div class="dsec__head"><h2>' + bi('span', copy.shots.zh, copy.shots.en) + '</h2></div>' +
+        '<div class="shots">' + shots + '</div></section>' : '') +
+
+      (bullets.length ? '<section class="dsec"><div class="dsec__head"><h2>' + bi('span', copy.features.zh, copy.features.en) + '</h2></div>' +
+        '<ul class="features">' + bullets.join('') + '</ul></section>' : '') +
+
+      '<section class="dsec"><div class="dsec__head"><h2>' + bi('span', copy.install.zh, copy.install.en) + '</h2></div>' +
+        '<ol class="ways">' +
+          '<li>' +
+            '<h3>' + bi('span', copy.wayFromIndexTitle.zh, copy.wayFromIndexTitle.en) + '</h3>' +
+            '<p>' + bi('span', copy.wayFromIndexBody.zh, copy.wayFromIndexBody.en) + '</p>' +
+            cmd(indexUrl, copy.copy.zh, copy.copy.en) +
+          '</li>' +
+          '<li>' +
+            '<h3>' + bi('span', copy.wayByNameTitle.zh, copy.wayByNameTitle.en) + '</h3>' +
+            '<p>' + bi('span', copy.wayByNameBody.zh, copy.wayByNameBody.en) + '</p>' +
+            cmd(plugin.name, copy.copy.zh, copy.copy.en) +
+          '</li>' +
+          '<li>' +
+            '<h3>' + bi('span', copy.wayCliTitle.zh, copy.wayCliTitle.en) + '</h3>' +
+            '<p>' + bi('span', copy.wayCliBody.zh, copy.wayCliBody.en) + '</p>' +
+            cmd(cli, copy.copy.zh, copy.copy.en) +
+          '</li>' +
+        '</ol>' +
+        '<p class="dnote">' + bi('span', copy.afterInstall.zh, copy.afterInstall.en) + '</p>' +
+      '</section>' +
+
+      (versionRows ? '<section class="dsec"><div class="dsec__head"><h2>' + bi('span', copy.versions.zh, copy.versions.en) + '</h2></div>' +
+        '<div class="tablewrap"><table class="versions"><thead><tr>' +
+          '<th>' + bi('span', copy.versionCol.zh, copy.versionCol.en) + '</th>' +
+          '<th>' + bi('span', copy.dateCol.zh, copy.dateCol.en) + '</th>' +
+          '<th>DSH</th>' +
+        '</tr></thead><tbody>' + versionRows + '</tbody></table></div></section>' : '');
   }
 
   function chips(plugins, ui) {
@@ -188,7 +336,10 @@ var PAGE = (function () {
     return h.toString(36);
   }
 
-  return { normalize: normalize, row: row, chips: chips, fingerprint: fingerprint, hash: hash };
+  return {
+    normalize: normalize, row: row, chips: chips, detailHtml: detailHtml,
+    formatCount: formatCount, fingerprint: fingerprint, hash: hash
+  };
 })();
 `;
 
@@ -516,6 +667,123 @@ const CSS = String.raw`
   .foot__links a { transition: color .25s var(--ease); }
   .foot__links a:hover { color: var(--ink); }
 
+  /* ── 详情页 ─────────────────────────────────────────────── */
+  #listView[hidden], #detailView[hidden] { display: none; }
+
+  .crumb { padding-top: 26px; }
+  .crumb a { font-size: 12px; color: var(--ink-3); transition: color .25s var(--ease); }
+  .crumb a:hover { color: var(--ink); }
+
+  .dhead {
+    display: grid; grid-template-columns: 72px minmax(0, 1fr);
+    gap: clamp(18px, 3vw, 30px);
+    padding: clamp(24px, 3.6vw, 40px) 0 clamp(24px, 3.4vw, 34px);
+    border-bottom: 1px solid var(--ink);
+  }
+  .dhead__icon { width: 72px; height: 72px; display: block; }
+  .dhead__title { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .dhead__title h1 {
+    margin: 0; font-family: var(--serif); font-weight: 500;
+    font-size: clamp(27px, 3.4vw, 38px); letter-spacing: .01em; line-height: 1.2;
+  }
+  .dhead__id {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    margin: 10px 0 0; font-family: var(--mono); font-size: 12px; color: var(--ink-3);
+  }
+  .dhead__desc { margin: 14px 0 0; font-size: 15px; line-height: 1.75; color: var(--ink-2); max-width: 64ch; }
+  .dhead__acts { display: flex; gap: 18px; margin-top: 16px; flex-wrap: wrap; }
+
+  .metrics {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    margin: 0; border-bottom: 1px solid var(--rule);
+  }
+  .metric { padding: 16px 0 18px 18px; border-left: 1px solid var(--rule-soft); }
+  .metric:first-child { padding-left: 0; border-left: 0; }
+  .metric dt { font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3); }
+  .metric dd { margin: 7px 0 0; font-size: 20px; font-family: var(--serif); color: var(--ink); font-variant-numeric: tabular-nums; }
+  .metric dd.mono { font-family: var(--mono); font-size: 13.5px; font-style: normal; }
+
+  .dsec { padding: clamp(28px, 3.8vw, 44px) 0; border-bottom: 1px solid var(--rule); }
+  .dsec:last-child { border-bottom: 0; }
+  .dsec__head h2 {
+    display: flex; align-items: center; gap: 12px; margin: 0 0 clamp(16px, 2.2vw, 24px);
+    font-family: var(--serif); font-size: clamp(18px, 1.8vw, 21px); font-weight: 500; letter-spacing: .02em;
+  }
+  .dsec__head h2::before { content: ""; width: 18px; height: 1px; background: var(--accent); flex: none; }
+
+  .shots { display: grid; gap: clamp(18px, 2.4vw, 26px); max-width: 920px; }
+  .shot { margin: 0; }
+  .shot a { display: block; border: 1px solid var(--rule); background: var(--paper-raised); transition: border-color .3s var(--ease); }
+  .shot a:hover { border-color: color-mix(in oklab, var(--ink) 32%, transparent); }
+  .shot img { display: block; width: 100%; height: auto; }
+  .shot figcaption { margin-top: 10px; font-size: 11.5px; color: var(--ink-3); }
+  .shot--narrow { max-width: 300px; }
+
+  .features { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; max-width: 72ch; }
+  .features li { position: relative; padding-left: 20px; font-size: 14px; line-height: 1.78; color: var(--ink-2); }
+  .features li::before { content: ""; position: absolute; left: 0; top: .74em; width: 8px; height: 1px; background: var(--accent); }
+
+  .ways { list-style: none; counter-reset: way; margin: 0; padding: 0; display: grid; gap: clamp(20px, 2.8vw, 28px); }
+  .ways li { counter-increment: way; position: relative; padding-left: 38px; display: grid; gap: 9px; }
+  .ways li::before {
+    content: "0" counter(way); position: absolute; left: 0; top: 1px;
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+  }
+  .ways h3 { margin: 0; font-size: 14.5px; font-weight: 600; letter-spacing: .01em; }
+  .ways p { margin: 0; font-size: 13.5px; color: var(--ink-2); line-height: 1.72; max-width: 66ch; }
+  .dnote { margin: 22px 0 0; font-size: 12px; color: var(--ink-3); }
+
+  .cmd {
+    display: flex; align-items: center; gap: 10px; max-width: 640px;
+    border: 1px solid var(--rule); border-left: 2px solid var(--accent);
+    background: var(--paper-raised); padding: 7px 9px 7px 12px;
+  }
+  .cmd code { flex: 1; min-width: 0; font-family: var(--mono); font-size: 12px; color: var(--ink); overflow-x: auto; white-space: nowrap; }
+  .copy--sm {
+    height: 26px; padding: 0 10px; font-size: 10.5px; letter-spacing: .1em;
+    background: transparent; color: var(--ink-2); border: 1px solid var(--rule); flex: none;
+  }
+  .copy--sm:hover { color: var(--ink); border-color: color-mix(in oklab, var(--ink) 34%, transparent); }
+  .copy--sm[data-done="true"] { color: var(--accent); border-color: color-mix(in oklab, var(--accent) 45%, transparent); }
+  .copy--sm[data-done="false"] { color: var(--ink-3); }
+
+  .tablewrap { overflow-x: auto; }
+  .versions { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .versions th {
+    text-align: left; padding: 0 14px 10px 0;
+    font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink-3); font-weight: 550; border-bottom: 1px solid var(--rule);
+  }
+  .versions td { padding: 10px 14px 10px 0; border-bottom: 1px solid var(--rule-soft); color: var(--ink-2); }
+  .versions td:first-child { color: var(--ink); }
+  .versions tr:last-child td { border-bottom: 0; }
+  .versions .ver { margin-left: 8px; }
+
+  .plugin { position: relative; }
+  .plugin__overlay { position: absolute; inset: 0; z-index: 1; }
+  .plugin__acts { position: relative; z-index: 2; }
+  .plugin:hover .plugin__title h3 span,
+  .plugin:focus-within .plugin__title h3 span {
+    text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px;
+  }
+  .plugin:focus-within::after { transform: scaleX(1); }
+
+  @media (max-width: 900px) {
+    .dhead { grid-template-columns: 56px minmax(0, 1fr); }
+    .dhead__icon { width: 56px; height: 56px; }
+    .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .metric:nth-child(3) { padding-left: 0; border-left: 0; }
+    .ways li { padding-left: 32px; }
+  }
+
+  @media (max-width: 620px) {
+    .dhead { grid-template-columns: 1fr; }
+    .dhead__icon { width: 52px; height: 52px; }
+    .dhead__title h1 { font-size: 26px; }
+    .metric dd { font-size: 17px; }
+    .cmd code { font-size: 11px; }
+  }
+
   /* ── entrance ───────────────────────────────────────────── */
   .rise { opacity: 0; transform: translateY(14px); animation: rise .9s var(--ease) forwards; animation-delay: var(--d, 0ms); }
   @keyframes rise { to { opacity: 1; transform: none; } }
@@ -552,15 +820,20 @@ const CSS = String.raw`
   }
 `;
 
-/** 页面运行时脚本（内联）。PAGE 与 PAGE_UI 由同一 <script> 中的构建产物先声明。 */
+/** 页面运行时脚本（内联）。PAGE / PAGE_UI / PAGE_DETAILS 由同一 <script> 先声明。 */
 const CLIENT_JS = String.raw`
   (function () {
     var root = document.documentElement;
     var UI = PAGE_UI;
+    var DETAIL = PAGE_DETAIL_COPY;
+    var DETAILS = PAGE_DETAILS || {};
     var store = {
       get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
       set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
     };
+
+    var plugins = [];
+    var indexUrl = PAGE_INDEX_URL;
 
     /* ── 主题 ── */
     var themeBtn = document.getElementById('themeBtn');
@@ -576,46 +849,45 @@ const CLIENT_JS = String.raw`
     var lang = query === 'zh' || query === 'en'
       ? query
       : store.get('lang') || (navigator.language.indexOf('zh') === 0 ? 'zh' : 'en');
-    var COPY_LABEL = {
-      zh: { copy: '复制', done: '已复制 ✓', failed: '复制失败' },
-      en: { copy: 'Copy', done: 'Copied ✓', failed: 'Copy failed' }
-    };
+    var DONE_LABEL = { zh: '已复制 ✓', en: 'Copied ✓' };
+    var FAIL_LABEL = { zh: '复制失败', en: 'Copy failed' };
 
     function paint(el, key) {
       var raw = el.getAttribute(key === 'zh' ? 'data-zh' : 'data-en');
       if (raw === null) return;
       el.innerHTML = raw.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\n/g, '<br>');
     }
+    function paintAll() {
+      var nodes = document.querySelectorAll('[data-zh]');
+      for (var i = 0; i < nodes.length; i++) paint(nodes[i], lang);
+    }
+    function currentSlug() {
+      var m = (location.hash || '').match(/^#\/plugin\/([^/?]+)/);
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+    function updateTitle() {
+      var slug = currentSlug();
+      var plugin = slug ? findPlugin(slug) : null;
+      if (plugin) {
+        document.title = plugin.title[lang] + ' · ' + (lang === 'zh' ? 'DSH 插件' : 'DSH plugin');
+      } else {
+        document.title = root.getAttribute('data-title-' + lang) || document.title;
+      }
+    }
     function applyLang(next) {
       lang = next;
       root.lang = lang === 'zh' ? 'zh-CN' : 'en';
-      var nodes = document.querySelectorAll('[data-zh]');
-      for (var i = 0; i < nodes.length; i++) paint(nodes[i], lang);
-      document.title = root.getAttribute('data-title-' + lang) || document.title;
+      paintAll();
       langBtn.textContent = lang === 'zh' ? 'EN' : '中';
-      copyBtn.textContent = COPY_LABEL[lang].copy;
+      updateTitle();
       store.set('lang', lang);
     }
+    langBtn.addEventListener('click', function () { applyLang(lang === 'zh' ? 'en' : 'zh'); });
 
-    /* ── 复制索引地址 ── */
-    var copyBtn = document.getElementById('copyBtn');
-    var urlEl = document.getElementById('indexUrl');
-    var timer = null;
-
-    function flash(key) {
-      copyBtn.setAttribute('data-done', key === 'done' ? 'true' : 'false');
-      copyBtn.textContent = COPY_LABEL[lang][key];
-      clearTimeout(timer);
-      timer = setTimeout(function () {
-        copyBtn.removeAttribute('data-done');
-        copyBtn.textContent = COPY_LABEL[lang].copy;
-      }, 1600);
-    }
-
-    /* 老浏览器兜底：临时 textarea + execCommand。 */
-    function legacyCopy(text) {
+    /* ── 复制（列表页的索引地址、详情页的命令） ── */
+    function legacyCopy(value) {
       var area = document.createElement('textarea');
-      area.value = text;
+      area.value = value;
       area.setAttribute('readonly', '');
       area.style.position = 'fixed';
       area.style.opacity = '0';
@@ -626,16 +898,26 @@ const CLIENT_JS = String.raw`
       document.body.removeChild(area);
       return ok;
     }
-
-    copyBtn.addEventListener('click', function () {
-      var text = urlEl.textContent.trim();
-      flash('done'); /* 先给反馈，失败再改口 */
+    function flash(btn, key) {
+      btn.setAttribute('data-done', key === 'done' ? 'true' : 'false');
+      btn.textContent = key === 'done' ? DONE_LABEL[lang] : FAIL_LABEL[lang];
+      clearTimeout(btn._timer);
+      btn._timer = setTimeout(function () {
+        btn.removeAttribute('data-done');
+        paint(btn, lang);
+      }, 1500);
+    }
+    document.addEventListener('click', function (event) {
+      var btn = event.target.closest ? event.target.closest('[data-copy]') : null;
+      if (!btn) return;
+      var value = btn.getAttribute('data-copy');
+      flash(btn, 'done');
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).catch(function () {
-          if (!legacyCopy(text)) flash('failed');
+        navigator.clipboard.writeText(value).catch(function () {
+          if (!legacyCopy(value)) flash(btn, 'failed');
         });
-      } else if (!legacyCopy(text)) {
-        flash('failed');
+      } else if (!legacyCopy(value)) {
+        flash(btn, 'failed');
       }
     });
 
@@ -658,8 +940,8 @@ const CLIENT_JS = String.raw`
       }
     }
 
-    /* ── 用索引里的最新数据重绘（索引更新后无需重建页面） ── */
-    function render(list) {
+    /* ── 列表 ── */
+    function renderList(list) {
       var host = document.getElementById('pluginList');
       if (host) host.innerHTML = list.map(function (plugin, i) { return PAGE.row(plugin, i, UI); }).join('\n');
       var slot = document.getElementById('chipSlot');
@@ -672,26 +954,86 @@ const CLIENT_JS = String.raw`
         if (dates.length) last.textContent = dates[dates.length - 1];
       }
       bindChips();
-      applyLang(lang);
+      paintAll();
     }
 
-    langBtn.addEventListener('click', function () { applyLang(lang === 'zh' ? 'en' : 'zh'); });
-    applyLang(lang);
-    bindChips();
+    /* ── 详情 ── */
+    function findPlugin(slug) {
+      for (var i = 0; i < plugins.length; i++) if (plugins[i].slug === slug) return plugins[i];
+      return null;
+    }
+    function loadDownloads(pkg) {
+      if (!window.fetch || location.protocol === 'file:') return;
+      fetch('api/downloads?pkg=' + encodeURIComponent(pkg))
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (data) {
+          if (!data || typeof data.downloads !== 'number') return;
+          var node = document.querySelector('[data-downloads="' + pkg + '"]');
+          if (!node) return;
+          var formatted = PAGE.formatCount(data.downloads);
+          if (formatted) node.textContent = formatted;
+        })
+        .catch(function () {});
+    }
+    function showDetail(slug) {
+      var plugin = findPlugin(slug);
+      var host = document.getElementById('detailView');
+      var list = document.getElementById('listView');
+      if (!plugin || !host) { location.replace('#/'); return; }
+      host.innerHTML = PAGE.detailHtml(plugin, DETAILS[slug] || {}, DETAIL, indexUrl);
+      host.hidden = false;
+      if (list) list.hidden = true;
+      paintAll();
+      updateTitle();
+      window.scrollTo(0, 0);
+      loadDownloads(plugin.name);
+    }
+    function showList() {
+      var host = document.getElementById('detailView');
+      var list = document.getElementById('listView');
+      if (host) { host.hidden = true; host.innerHTML = ''; }
+      if (list) list.hidden = false;
+      updateTitle();
+    }
+    function route() {
+      var slug = currentSlug();
+      if (slug) {
+        showDetail(slug);
+        return;
+      }
+      showList();
+      var hash = location.hash || '';
+      if (hash && hash.indexOf('#/') !== 0) {
+        var target = document.getElementById(hash.slice(1));
+        if (target) target.scrollIntoView();
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    window.addEventListener('hashchange', route);
 
-    var main = document.querySelector('main');
-    var built = main ? main.getAttribute('data-fp') : null;
-    if (built && window.fetch && location.protocol !== 'file:') {
+    /* ── 启动：先用构建期的数据，再与 /index.json 对齐 ── */
+    plugins = (window.PAGE_PLUGINS || []).slice();
+    window.addEventListener('hashchange', route);
+    route();
+
+    function syncIndex() {
+      var main = document.querySelector('main');
+      var built = main ? main.getAttribute('data-fp') : null;
+      if (!built || !window.fetch || location.protocol === 'file:') return;
       fetch('index.json', { credentials: 'omit' })
         .then(function (res) { return res.ok ? res.json() : null; })
         .then(function (data) {
           if (!data || !data.plugins) return;
           var list = PAGE.normalize(data);
           if (PAGE.hash(PAGE.fingerprint(list)) === built) return;
-          render(list);
+          plugins = list;
+          renderList(list);
+          route();
         })
         .catch(function () {});
     }
+    syncIndex();
   })();
 `;
 
@@ -761,8 +1103,44 @@ const STEPS = [
   },
 ];
 
+/** 详情页的固定文案。 */
+const DETAIL_COPY = {
+  back: { zh: "← 所有插件", en: "← All plugins" },
+  shots: { zh: "界面", en: "Screens" },
+  features: { zh: "能做什么", en: "What it does" },
+  install: { zh: "安装", en: "Install" },
+  versions: { zh: "版本记录", en: "Versions" },
+  weekly: { zh: "周下载", en: "downloads / week" },
+  updated: { zh: "最近更新", en: "updated" },
+  license: { zh: "许可", en: "license" },
+  source: { zh: "源码", en: "Source" },
+  copy: { zh: "复制", en: "Copy" },
+  latestChip: { zh: "最新", en: "latest" },
+  versionCol: { zh: "版本", en: "Version" },
+  dateCol: { zh: "日期", en: "Date" },
+  wayFromIndexTitle: { zh: "从索引安装", en: "Install from the index" },
+  wayFromIndexBody: {
+    zh: "在 DSH 的「插件 → 发现」里搜索插件名，点「安装」。还没加过索引的话，先把下面的地址加进「添加索引源」。",
+    en: "Search for the plugin in DSH → Plugins → Discover and choose Install. If you have not added the index yet, add the address below in Add index source.",
+  },
+  wayByNameTitle: { zh: "按包名安装", en: "Install by package name" },
+  wayByNameBody: {
+    zh: "在「插件」页点「添加插件」，填入下面的包名，再选择「立即启用」。",
+    en: "Open Plugins, choose Add plugin, paste the package name below and pick Enable now.",
+  },
+  wayCliTitle: { zh: "命令行安装", en: "Install from the command line" },
+  wayCliBody: {
+    zh: "装了 dsh 命令行的话，可以直接把包装进对应的 profile（示例用 desktop，换成你实际在用的 profile 即可）。",
+    en: "With the dsh CLI installed you can add the package to a profile directly; the example uses desktop, swap in the profile you actually run.",
+  },
+  afterInstall: {
+    zh: "有新版本时，「发现」里的卡片会提示更新；卸载在「已安装」里完成。",
+    en: "Cards in Discover flag new versions; uninstall from Installed.",
+  },
+};
+
 /** 拼出整页。 */
-function renderPage({ index, site, plugins, hours }) {
+function renderPage({ index, site, plugins, hours, details }) {
   const title = index.title;
   const description = index.description;
   const hero = site.hero;
@@ -808,6 +1186,9 @@ function renderPage({ index, site, plugins, hours }) {
 <meta property="og:description" content="${attr(description.zh)}" />
 <meta name="theme-color" content="#f7f5f0" media="(prefers-color-scheme: light)" />
 <meta name="theme-color" content="#1c1c1b" media="(prefers-color-scheme: dark)" />
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/assets/favicon.ico" sizes="any" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
 <script>
   (function () {
     var theme;
@@ -854,6 +1235,7 @@ function renderPage({ index, site, plugins, hours }) {
 
 <main class="wrap" data-fp="${PAGE.hash(PAGE.fingerprint(plugins))}">
 
+  <div id="listView">
   <section class="hero">
     <div class="hero__lead">
       <p class="cap eyebrow rise" style="--d:40ms">${bilingual(hero.eyebrow.zh, hero.eyebrow.en)}</p>
@@ -912,6 +1294,9 @@ ${plugins.map((plugin, i) => PAGE.row(plugin, i, UI)).join("\n")}
 
     <p class="install__foot">${bilingual(UI.zh.thenText, UI.en.thenText)}</p>
   </section>
+  </div>
+
+  <div id="detailView" hidden></div>
 
 </main>
 
@@ -930,6 +1315,10 @@ ${plugins.map((plugin, i) => PAGE.row(plugin, i, UI)).join("\n")}
 
 <script>${PAGE_RUNTIME_JS}
 var PAGE_UI = ${JSON.stringify(UI)};
+var PAGE_PLUGINS = ${JSON.stringify(plugins)};
+var PAGE_DETAILS = ${JSON.stringify(details)};
+var PAGE_DETAIL_COPY = ${JSON.stringify(DETAIL_COPY)};
+var PAGE_INDEX_URL = ${JSON.stringify(site.indexUrl)};
 ${CLIENT_JS}</script>
 </body>
 </html>
@@ -937,17 +1326,60 @@ ${CLIENT_JS}</script>
 }
 
 /* ── 主流程 ─────────────────────────────────────────────────── */
-const [indexText, site] = await Promise.all([readText("index.json"), readJson("site.json")]);
+const [indexText, site, config] = await Promise.all([
+  readText("index.json"),
+  readJson("site.json"),
+  readJson("plugins.json"),
+]);
 const index = JSON.parse(indexText);
 const workflowPath = ".github/workflows/update-index.yml";
 const hours = await readText(workflowPath).then(refreshHours).catch(() => null);
 const plugins = PAGE.normalize(index);
+
+/** 从已有产物里读回详情数据（含下载量），--check 时不联网也能比对。 */
+function readPreviousDetails(html) {
+  if (!html) return null;
+  const marker = "var PAGE_DETAILS = ";
+  const at = html.indexOf(marker);
+  if (at < 0) return null;
+  const from = at + marker.length;
+  const to = html.indexOf(";\nvar PAGE_DETAIL_COPY", from);
+  if (to < 0) return null;
+  try {
+    return JSON.parse(html.slice(from, to));
+  } catch {
+    return null;
+  }
+}
+
+const previousHtml = checkOnly ? await readText("dist/index.html").catch(() => null) : null;
+const previousDetails = checkOnly ? readPreviousDetails(previousHtml) : null;
+
+/** 详情页数据：来自 plugins.json 的展示信息 + npm 周下载量。 */
+const details = {};
+for (const plugin of plugins) {
+  const entry = config.plugins.find((item) => item.name === plugin.name);
+  const detail = entry?.detail ?? {};
+  const downloads = checkOnly
+    ? (previousDetails?.[plugin.slug]?.downloads ?? null)
+    : await fetchWeeklyDownloads(plugin.name);
+  details[plugin.slug] = {
+    license: detail.license ?? null,
+    features: detail.features ?? null,
+    screenshots: detail.screenshots ?? [],
+    downloads,
+  };
+  console.log(
+    `  ${plugin.slug}  shots=${details[plugin.slug].screenshots.length}  downloads/wk=${downloads ?? "—"}`,
+  );
+}
 
 const html = renderPage({
   index,
   site,
   plugins,
   hours,
+  details,
 });
 
 if (checkOnly) {

@@ -16,6 +16,10 @@ https://dsh.127.dev/index.json
 
 ![落地页](docs/images/preview-zh.png)
 
+每个插件还有自己的详情页：截图画廊、周下载量、安装方式和完整版本记录。
+
+![插件详情页](docs/images/detail-zh.png)
+
 ## 收录的插件
 
 | 插件 | 说明 | 最新版 |
@@ -39,6 +43,7 @@ https://dsh.127.dev/index.json
 - 数据源：`plugins.json`（人工维护元数据）+ **npm registry**（版本号、发布时间、`engines.dsh`）
 - `scripts/build-index.mjs` 生成 `index.json`，**先过官方校验器** `@deepseek-ai/dsh-plugin-market-index`，失败不写文件
 - `scripts/build-page.mjs` 把 `index.json` + `site.json` 编成单文件自包含的 `dist/index.html`（CSS、JS、图标全部内联，不发任何外部请求）；页面加载时还会再读一次 `/index.json`，所以索引刷新后不用重建页面
+- `npm run build` 还会向 npm 的下载统计接口取每个插件的周下载量，所以详情页在关闭 JS 时也有数字
 - GitHub Actions 每 6 小时跑一次，只有内容变化才提交；也可以手动 `workflow_dispatch`
 - 因此：**发 npm 新版本 → 最迟 6 小时自动出现在索引和落地页里**
 
@@ -46,8 +51,10 @@ https://dsh.127.dev/index.json
 
 `https://dsh.127.dev/` 由仓库里的 Cloudflare Worker（`worker/index.js` + `wrangler.toml`）提供：
 
-- `/` 或 `/index.html` → 落地页
+- `/` 或 `/index.html` → 落地页（插件详情页是前端路由 `#/plugin/<slug>`）
 - `/index.json` → 市场索引
+- `/assets/*` → 截图与 favicon（边缘缓存 7 天）
+- `/api/downloads?pkg=…` → npm 周下载量，代理并缓存 1 小时
 - 其余路径 → 404
 
 两者都按请求实时读取 GitHub 上的文件，边缘缓存 5 分钟。刷新索引或页面无需重新部署 Worker；只有 Worker 代码变更时才需要 `npx wrangler deploy`。
@@ -83,7 +90,19 @@ npm run check        # 校验 index.json，并确认 dist/index.html 与数据�
 }
 ```
 
-3. `npm run build` → 提交 `plugins.json`、图标、`index.json` 和 `dist/index.html`
+3. 建议顺手给插件一个详情页：在条目里加 `detail`——`license`、中英双语 `features`，以及指向 `assets/shots/<slug>/` 的 `screenshots`（WebP，宽约 1400 px，带宽高与双语图注）：
+
+```json
+"detail": {
+  "license": "MIT",
+  "features": { "en": ["…"], "zh": ["…"] },
+  "screenshots": [
+    { "src": "assets/shots/your-plugin/panel.webp", "w": 1400, "h": 875, "en": "…", "zh": "…" }
+  ]
+}
+```
+
+4. `npm run build` → 提交 `plugins.json`、图标、截图、`index.json` 和 `dist/index.html`
 
 约束（与官方 format 1 一致，构建脚本会强制校验）：
 `name` 必须是合法 npm 包名；`versions` 非空、版本号是精确 SemVer、发布时间是 Unix 秒；

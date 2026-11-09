@@ -12,18 +12,51 @@
   },
   "metadata": {
     "categories": {
-      "interface": { "title": { "en": "Interface", "zh": "界面" } },
-      "tools": { "title": { "en": "Tools", "zh": "工具" } },
-      "workflow": { "title": { "en": "Workflow", "zh": "工作流" } }
+      "interface": {
+        "title": {
+          "en": "Interface",
+          "zh": "界面"
+        }
+      },
+      "tools": {
+        "title": {
+          "en": "Tools",
+          "zh": "工具"
+        }
+      },
+      "workflow": {
+        "title": {
+          "en": "Workflow",
+          "zh": "工作流"
+        }
+      }
     },
     "labels": {
-      "macos": { "title": { "en": "macOS", "zh": "macOS" } },
-      "bilingual": { "title": { "en": "Bilingual", "zh": "中英双语" } },
-      "local-only": { "title": { "en": "Local only", "zh": "纯本地" } }
+      "macos": {
+        "title": {
+          "en": "macOS",
+          "zh": "macOS"
+        }
+      },
+      "bilingual": {
+        "title": {
+          "en": "Bilingual",
+          "zh": "中英双语"
+        }
+      },
+      "local-only": {
+        "title": {
+          "en": "Local only",
+          "zh": "纯本地"
+        }
+      }
     },
     "sortKeys": {
       "added": {
-        "title": { "en": "Added", "zh": "收录时间" },
+        "title": {
+          "en": "Added",
+          "zh": "收录时间"
+        },
         "order": "desc"
       }
     }
@@ -34,9 +67,23 @@
       "author": "polunzh",
       "icon": "icons/task-notifier.svg",
       "category": "interface",
-      "keywords": ["notification", "task", "unread", "chime", "sidebar", "macos", "todo"],
-      "labels": ["macos", "bilingual", "local-only"],
-      "sortKeys": { "added": 1 },
+      "keywords": [
+        "notification",
+        "task",
+        "unread",
+        "chime",
+        "sidebar",
+        "macos",
+        "todo"
+      ],
+      "labels": [
+        "macos",
+        "bilingual",
+        "local-only"
+      ],
+      "sortKeys": {
+        "added": 1
+      },
       "homepage": "https://github.com/polunzh/dsh-task-notifier#readme",
       "repository": "https://github.com/polunzh/dsh-task-notifier",
       "title": {
@@ -46,6 +93,55 @@
       "description": {
         "en": "Chime + system/browser notification when a task finishes, plus a Tasks sidebar panel filtering unread / running / completed sessions; unread state persists locally.",
         "zh": "任务完成时响提示音并弹系统/浏览器通知；侧边栏「任务」面板可筛选已完成未读 / 运行中 / 已完成 / 全部，未读状态本地持久化。"
+      },
+      "detail": {
+        "license": "MIT",
+        "features": {
+          "zh": [
+            "任务结束时响提示音，同时发系统通知和浏览器通知，离开窗口也不会错过",
+            "侧边栏「任务面板」按待回复、运行中、已完成未读分列，一眼看到需要处理的那条",
+            "未读状态存在本地，重启 DSH 之后依然是未读",
+            "面板支持搜索、全部标为已读，以及窄屏下的单列布局",
+            "中英双语、深色模式，纯本地运行不联网"
+          ],
+          "en": [
+            "Chime plus system and browser notifications when a task finishes, so nothing is missed while you are away from the window",
+            "A Tasks panel in the sidebar splits needs-input, running and unread-finished sessions, so the one you must handle stands out",
+            "Unread state is stored locally and survives a restart",
+            "Search, mark-all-read and a single-column layout on narrow screens",
+            "Bilingual, dark-mode aware, runs entirely offline"
+          ]
+        },
+        "screenshots": [
+          {
+            "src": "assets/shots/dsh-task-notifier/panel-light.webp",
+            "w": 1400,
+            "h": 875,
+            "zh": "任务面板：待回复、运行中、已完成未读三列并排",
+            "en": "Tasks panel: needs input, running and unread in three columns"
+          },
+          {
+            "src": "assets/shots/dsh-task-notifier/unread-tab.webp",
+            "w": 1400,
+            "h": 875,
+            "zh": "只看已完成未读，逐条打开或标为已读",
+            "en": "Filtered to unread finished tasks, opened one by one"
+          },
+          {
+            "src": "assets/shots/dsh-task-notifier/mobile.webp",
+            "w": 390,
+            "h": 844,
+            "zh": "窄屏自动收成单列，手机上也顺手",
+            "en": "Collapses to a single column on a phone"
+          },
+          {
+            "src": "assets/shots/dsh-task-notifier/panel-dark.webp",
+            "w": 1400,
+            "h": 875,
+            "zh": "跟随系统深色主题",
+            "en": "Follows the system dark theme"
+          }
+        ]
       }
     },
     {
@@ -53,9 +149,23 @@
       "author": "polunzh",
       "icon": "icons/print-studio.svg",
       "category": "tools",
-      "keywords": ["print", "pdf", "a4", "handout", "editor", "markdown", "duplex", "cups"],
-      "labels": ["bilingual", "local-only"],
-      "sortKeys": { "added": 2 },
+      "keywords": [
+        "print",
+        "pdf",
+        "a4",
+        "handout",
+        "editor",
+        "markdown",
+        "duplex",
+        "cups"
+      ],
+      "labels": [
+        "bilingual",
+        "local-only"
+      ],
+      "sortKeys": {
+        "added": 2
+      },
       "homepage": "https://github.com/polunzh/dsh-doc#readme",
       "repository": "https://github.com/polunzh/dsh-doc",
       "title": {
@@ -65,6 +175,41 @@
       "description": {
         "en": "Word-style A4 editor for handouts: compose on a real paper sheet with a formatting ribbon, review full-size pagination and layout guards, then print duplex on a LAN printer and get a delivery receipt.",
         "zh": "Word 式 A4 讲义编辑器：在真实纸面上排版，Ribbon 工具栏调字体、对齐与分栏；按需全屏预览分页与纸张校验，再按打印机实测的双面能力出纸并回报回执。"
+      },
+      "detail": {
+        "license": "MIT",
+        "features": {
+          "zh": [
+            "在真实 A4 纸面上排版，看到的就是打出来的样子",
+            "Ribbon 工具栏调字体、字号、行距、边距与单双栏",
+            "全屏预览分页与纸张校验，打印前先把问题找出来",
+            "按打印机实测的双面能力出纸，并回报一张打印回执",
+            "中英双语，本地渲染与打印，不经过云端"
+          ],
+          "en": [
+            "Compose on a real A4 sheet, so what you see is what comes out of the printer",
+            "A formatting ribbon for font, size, leading, margins and one or two columns",
+            "Full-size preview of pagination and paper checks before you spend paper",
+            "Prints duplex according to what the printer actually supports, then reports a delivery receipt",
+            "Bilingual, rendered and printed locally, with no cloud in the loop"
+          ]
+        },
+        "screenshots": [
+          {
+            "src": "assets/shots/dsh-doc/workspace-zh.webp",
+            "w": 1600,
+            "h": 1000,
+            "zh": "中文工作区：上方工具栏，下方真实纸面",
+            "en": "Chinese workspace: ribbon above, real paper below"
+          },
+          {
+            "src": "assets/shots/dsh-doc/workspace-en.webp",
+            "w": 1600,
+            "h": 1000,
+            "zh": "英文界面的同一份讲义",
+            "en": "The same handout in the English interface"
+          }
+        ]
       }
     }
   ]
