@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="DSH Plugin Index">
+  <title>DSH Plugin Index</title>
+  <!-- 索引标识：四格目录，右下一格用站点强调蓝，代表「这一项已经收录进来」 -->
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="#14161a"/>
+  <rect x="14" y="14" width="16" height="16" rx="4.4" fill="#f4f1ea"/>
+  <rect x="34" y="14" width="16" height="16" rx="4.4" fill="#f4f1ea"/>
+  <rect x="14" y="34" width="16" height="16" rx="4.4" fill="#f4f1ea"/>
+  <rect x="34" y="34" width="16" height="16" rx="4.4" fill="#3d8ee6"/>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="185" height="20" role="img" aria-label="DSH Plugin Index: Indexed">
+  <title>DSH Plugin Index: Indexed</title>
+  <defs>
+    <linearGradient id="sheen" x2="0" y2="100%">
+      <stop offset="0" stop-color="#fff" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".08"/>
+    </linearGradient>
+    <clipPath id="round"><rect width="185" height="20" rx="3"/></clipPath>
+  </defs>
+  <g clip-path="url(#round)">
+    <rect width="128" height="20" fill="#555555"/>
+    <rect x="128" width="57" height="20" fill="#2f6fd0"/>
+    <rect width="185" height="20" fill="url(#sheen)"/>
+  </g>
+  <!-- 标识：奶油底 + 四格，右下一格为强调蓝 -->
+  <rect x="6" y="2.5" width="15" height="15" rx="3.9" fill="#f4f1ea"/>
+  <rect x="9" y="5.5" width="3.9" height="3.9" rx="1.17" fill="#14161a"/>
+  <rect x="14.1" y="5.5" width="3.9" height="3.9" rx="1.17" fill="#14161a"/>
+  <rect x="9" y="10.6" width="3.9" height="3.9" rx="1.17" fill="#14161a"/>
+  <rect x="14.1" y="10.6" width="3.9" height="3.9" rx="1.17" fill="#3d8ee6"/>
+  <g fill="#fff" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">
+    <text x="25" y="14" textLength="97" lengthAdjust="spacingAndGlyphs">DSH Plugin Index</text>
+    <text x="134" y="14" textLength="44.9" lengthAdjust="spacingAndGlyphs">Indexed</text>
+  </g>
+</svg>
