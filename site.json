@@ -11,12 +11,12 @@
       "zh": "DEEPSEEK HARNESS · 自建插件索引"
     },
     "headline": {
-      "en": "Task alerts,\nA4 handouts,\nto-dos with a timer.",
-      "zh": "任务提醒、\n讲义打印、\n待办与番茄钟。"
+      "en": "DSH plugins,\none address.",
+      "zh": "DSH 插件，\n一个地址装齐。"
     },
     "lede": {
-      "en": "Paste the address into DSH's Discover and install all three. Packages live on npm; the index follows npm every six hours and flags new versions on the cards.",
-      "zh": "把地址加进 DSH 的「发现」，这三个插件就能直接装。插件包在 npm 上，索引每 6 小时跟着刷新，新版本会在卡片上提示。"
+      "en": "Add the address in DSH's Discover to browse, install and update the plugins here. Packages live on npm; the index follows npm every six hours and flags new versions.",
+      "zh": "把地址加进 DSH 的「发现」，就能浏览、安装和更新这里的插件。包发在 npm，索引每 6 小时跟着刷新，新版本会提示。"
     }
   }
 }

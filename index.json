@@ -5,8 +5,8 @@
     "zh": "polunzh 的 DSH 插件"
   },
   "description": {
-    "en": "polunzh's self-hosted DSH plugin index: Task Notifier, Print Studio, and To-do & Pomodoro. One address to install them from Discover; packages live on npm.",
-    "zh": "polunzh 自建的 DSH 插件索引：任务通知台、打印工坊、待办与番茄钟。加一个地址就能在「发现」里安装，包发在 npm。"
+    "en": "polunzh's self-hosted DSH plugin index. Add one address to browse, install and track updates in Discover; packages live on npm.",
+    "zh": "polunzh 自建的 DSH 插件索引。加一个地址，就能在「发现」里浏览、安装并跟随 npm 更新。"
   },
   "metadata": {
     "categories": {

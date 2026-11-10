@@ -1097,8 +1097,8 @@ const STEPS = [
     en: { title: "Turn on custom indexes", body: "In DSH, open Plugins → Experimental plugins and enable Custom plugin indexes." },
   },
   {
-    zh: { title: "添加索引地址", body: "进「发现」→「添加索引源」，粘贴地址，三个插件会直接列出来。" },
-    en: { title: "Add the index", body: "In Discover, choose Add index source, paste the address, and all three plugins show up." },
+    zh: { title: "添加索引地址", body: "进「发现」→「添加索引源」，粘贴地址，收录的插件会直接列出来。" },
+    en: { title: "Add the index", body: "In Discover, choose Add index source, paste the address, and the plugins show up." },
   },
   {
     zh: { title: "安装插件", body: "点「安装」。装好后可在「已安装」里启用、停用或卸载。" },
