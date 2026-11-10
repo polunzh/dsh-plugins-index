@@ -488,6 +488,7 @@ const CSS = String.raw`
     line-height: 1.14;
     letter-spacing: -0.005em;
     margin: 0;
+    white-space: pre-line;
     text-wrap: balance;
   }
   .lede {
@@ -798,6 +799,7 @@ const CSS = String.raw`
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; gap: 36px; align-items: start; }
     .hero__lead > * { max-width: 40ch; }
+    .hero__lead .eyebrow { max-width: none; }
     .plugin { grid-template-columns: 56px minmax(0, 1fr); }
     .plugin__icon { width: 56px; height: 56px; }
     .plugin__acts { grid-column: 2; flex-direction: row; align-items: center; gap: 18px; padding-top: 2px; }
@@ -1016,6 +1018,7 @@ const CLIENT_JS = String.raw`
     plugins = (window.PAGE_PLUGINS || []).slice();
     window.addEventListener('hashchange', route);
     route();
+    applyLang(lang);
 
     function syncIndex() {
       var main = document.querySelector('main');
@@ -1041,12 +1044,12 @@ const CLIENT_JS = String.raw`
 const UI = {
   zh: {
     navPlugins: "插件",
-    navInstall: "开始使用",
+    navInstall: "安装",
     sourceCap: "索引地址",
     copy: "复制",
     fallback: "备用地址",
-    glance: "索引概况",
-    pluginsTitle: "插件",
+    glance: "索引里有什么",
+    pluginsTitle: "收录的插件",
     pluginsRow: "插件",
     lastPublish: "最近更新",
     categoryRow: "分类",
@@ -1057,18 +1060,18 @@ const UI = {
     updated: "更新",
     requires: "需要 DSH",
     srcLink: "源码",
-    installTitle: "开始使用",
-    thenText: "插件有新版本时，「发现」里的卡片会提示；卸载在「已安装」里完成。",
+    installTitle: "装进 DSH",
+    thenText: "索引每 6 小时随 npm 刷新，新版本会在卡片上标出来。",
     footNote: "由 polunzh 维护 · MIT 协议",
     community: "社区市场",
   },
   en: {
     navPlugins: "Plugins",
-    navInstall: "Getting started",
+    navInstall: "Install",
     sourceCap: "Index URL",
     copy: "Copy",
     fallback: "Backup",
-    glance: "Overview",
+    glance: "In this index",
     pluginsTitle: "Plugins",
     pluginsRow: "Plugins",
     lastPublish: "Updated",
@@ -1080,8 +1083,8 @@ const UI = {
     updated: "updated",
     requires: "needs DSH",
     srcLink: "Source",
-    installTitle: "Getting started",
-    thenText: "Cards in Discover flag new versions; uninstall from Installed.",
+    installTitle: "Add to DSH",
+    thenText: "The index follows npm every six hours; new versions are flagged on the cards.",
     footNote: "Maintained by polunzh · MIT",
     community: "Community market",
   },
@@ -1090,16 +1093,16 @@ const UI = {
 /** 安装步骤（描述的是 DSH 界面，与具体插件无关）。 */
 const STEPS = [
   {
-    zh: { title: "启用自定义索引", body: "在 DSH 的「插件 → 实验性插件」里打开「自定义插件索引」。" },
-    en: { title: "Enable custom indexes", body: "Open Plugins → Experimental plugins in DSH and enable Custom plugin indexes." },
+    zh: { title: "启用自定义索引", body: "DSH →「插件」→「实验性插件」，打开「自定义插件索引」。" },
+    en: { title: "Turn on custom indexes", body: "In DSH, open Plugins → Experimental plugins and enable Custom plugin indexes." },
   },
   {
-    zh: { title: "添加索引地址", body: "进入「发现」，点「添加索引源」，粘贴上面的地址。" },
-    en: { title: "Add the index", body: "Open Discover, choose Add index source, and paste the URL above." },
+    zh: { title: "添加索引地址", body: "进「发现」→「添加索引源」，粘贴地址，三个插件会直接列出来。" },
+    en: { title: "Add the index", body: "In Discover, choose Add index source, paste the address, and all three plugins show up." },
   },
   {
-    zh: { title: "安装插件", body: "在「发现」里找到插件，点「安装」。" },
-    en: { title: "Install", body: "Find the plugin in Discover and choose Install." },
+    zh: { title: "安装插件", body: "点「安装」。装好后可在「已安装」里启用、停用或卸载。" },
+    en: { title: "Install", body: "Choose Install. Enable, disable or remove it later under Installed." },
   },
 ];
 
@@ -1120,18 +1123,18 @@ const DETAIL_COPY = {
   dateCol: { zh: "日期", en: "Date" },
   wayFromIndexTitle: { zh: "从索引安装", en: "Install from the index" },
   wayFromIndexBody: {
-    zh: "在 DSH 的「插件 → 发现」里搜索插件名，点「安装」。还没加过索引的话，先把下面的地址加进「添加索引源」。",
-    en: "Search for the plugin in DSH → Plugins → Discover and choose Install. If you have not added the index yet, add the address below in Add index source.",
+    zh: "在「插件 → 发现」里搜插件名，点「安装」。还没加过索引的话，先把下面的地址加进「添加索引源」。",
+    en: "Search for the plugin in Plugins → Discover and choose Install. If the index is not added yet, add the address below in Add index source.",
   },
   wayByNameTitle: { zh: "按包名安装", en: "Install by package name" },
   wayByNameBody: {
-    zh: "在「插件」页点「添加插件」，填入下面的包名，再选择「立即启用」。",
+    zh: "在「插件」页点「添加插件」，填入下面的包名，再选「立即启用」。",
     en: "Open Plugins, choose Add plugin, paste the package name below and pick Enable now.",
   },
   wayCliTitle: { zh: "命令行安装", en: "Install from the command line" },
   wayCliBody: {
-    zh: "装了 dsh 命令行的话，可以直接把包装进对应的 profile（示例用 desktop，换成你实际在用的 profile 即可）。",
-    en: "With the dsh CLI installed you can add the package to a profile directly; the example uses desktop, swap in the profile you actually run.",
+    zh: "装了 dsh 命令行的话，可以直接把包装进 profile。示例用 desktop，换成你实际在用的即可。",
+    en: "With the dsh CLI installed, add the package to a profile directly. The example uses desktop; swap in the profile you run.",
   },
   afterInstall: {
     zh: "有新版本时，「发现」里的卡片会提示更新；卸载在「已安装」里完成。",
@@ -1248,7 +1251,7 @@ function renderPage({ index, site, plugins, hours, details }) {
         </div>
         <div class="src__row">
           <span class="src__url" id="indexUrl">${esc(site.indexUrl)}</span>
-          <button class="copy" id="copyBtn" type="button">${esc(UI.zh.copy)}</button>
+          <button class="copy" id="copyBtn" type="button" data-zh="${attr(UI.zh.copy)}" data-en="${attr(UI.en.copy)}">${esc(UI.zh.copy)}</button>
         </div>
         <div class="src__alt">
           <span>${bilingual(UI.zh.fallback, UI.en.fallback)}</span>

@@ -7,16 +7,16 @@
   "communityUrl": "https://dshopen.org/",
   "hero": {
     "eyebrow": {
-      "en": "DEEPSEEK HARNESS · PLUGIN INDEX",
-      "zh": "DEEPSEEK HARNESS · 插件索引"
+      "en": "DEEPSEEK HARNESS · SELF-HOSTED INDEX",
+      "zh": "DEEPSEEK HARNESS · 自建插件索引"
     },
     "headline": {
-      "en": "Plugins for DSH,\nin one index.",
-      "zh": "为 DSH 做的插件，\n收在这一个索引里。"
+      "en": "Task alerts,\nA4 handouts,\nto-dos with a timer.",
+      "zh": "任务提醒、\n讲义打印、\n待办与番茄钟。"
     },
     "lede": {
-      "en": "Add the index once, then browse, install and update from Discover in DSH. Packages are published on npm; the index holds only names, descriptions, icons and versions.",
-      "zh": "添加一次索引，就能在 DSH 的「发现」里浏览、安装和更新。插件包在 npm 上，索引只带名称、简介、图标和版本号。"
+      "en": "Paste the address into DSH's Discover and install all three. Packages live on npm; the index follows npm every six hours and flags new versions on the cards.",
+      "zh": "把地址加进 DSH 的「发现」，这三个插件就能直接装。插件包在 npm 上，索引每 6 小时跟着刷新，新版本会在卡片上提示。"
     }
   }
 }

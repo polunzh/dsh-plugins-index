@@ -6,8 +6,8 @@
       "zh": "polunzh 的 DSH 插件"
     },
     "description": {
-      "en": "Self-hosted plugin index for DeepSeek Harness (DSH). Add it once in Discover to browse, install and track updates.",
-      "zh": "DeepSeek Harness（DSH）自建插件索引。在「发现」里添加一次，即可浏览、安装并跟踪更新。"
+      "en": "polunzh's self-hosted DSH plugin index: Task Notifier, Print Studio, and To-do & Pomodoro. One address to install them from Discover; packages live on npm.",
+      "zh": "polunzh 自建的 DSH 插件索引：任务通知台、打印工坊、待办与番茄钟。加一个地址就能在「发现」里安装，包发在 npm。"
     }
   },
   "metadata": {
@@ -91,25 +91,27 @@
         "zh": "任务通知台"
       },
       "description": {
-        "en": "Chime + system/browser notification when a task finishes, plus a Tasks sidebar panel filtering unread / running / completed sessions; unread state persists locally.",
-        "zh": "任务完成时响提示音并弹系统/浏览器通知；侧边栏「任务」面板可筛选已完成未读 / 运行中 / 已完成 / 全部，未读状态本地持久化。"
+        "en": "A chime and a system notification the moment a task finishes. The sidebar panel splits needs-input, running and unread-done sessions, and unread state survives a restart.",
+        "zh": "任务跑完响一声，系统通知同时弹出。侧边栏面板把待回复、运行中、已完成未读分开，未读状态重启后还在。"
       },
       "detail": {
         "license": "MIT",
         "features": {
           "zh": [
-            "任务结束时响提示音，同时发系统通知和浏览器通知，离开窗口也不会错过",
-            "侧边栏「任务面板」按待回复、运行中、已完成未读分列，一眼看到需要处理的那条",
-            "未读状态存在本地，重启 DSH 之后依然是未读",
-            "面板支持搜索、全部标为已读，以及窄屏下的单列布局",
-            "中英双语、深色模式，纯本地运行不联网"
+            "任务结束响铃，系统通知和浏览器通知同时到",
+            "侧边栏分待回复、运行中、已完成未读",
+            "未读状态存本地，重启 DSH 后还在",
+            "搜索任务，或一键全部标为已读",
+            "窄屏收成单列，手机尺寸也能用",
+            "中英双语、深色模式，纯本地不联网"
           ],
           "en": [
-            "Chime plus system and browser notifications when a task finishes, so nothing is missed while you are away from the window",
-            "A Tasks panel in the sidebar splits needs-input, running and unread-finished sessions, so the one you must handle stands out",
-            "Unread state is stored locally and survives a restart",
-            "Search, mark-all-read and a single-column layout on narrow screens",
-            "Bilingual, dark-mode aware, runs entirely offline"
+            "A chime plus system and browser notifications when a task finishes",
+            "Sidebar panel splits needs-input, running and unread-done",
+            "Unread state lives locally and survives a DSH restart",
+            "Search tasks, or mark everything read at once",
+            "Collapses to one column on narrow screens",
+            "Bilingual, dark mode, runs fully offline"
           ]
         },
         "screenshots": [
@@ -117,28 +119,28 @@
             "src": "assets/shots/dsh-task-notifier/panel-light.webp",
             "w": 1400,
             "h": 875,
-            "zh": "任务面板：待回复、运行中、已完成未读三列并排",
-            "en": "Tasks panel: needs input, running and unread in three columns"
+            "zh": "三栏任务面板：待回复、运行中、未读",
+            "en": "Three-column panel: needs input, running, unread"
           },
           {
             "src": "assets/shots/dsh-task-notifier/unread-tab.webp",
             "w": 1400,
             "h": 875,
-            "zh": "只看已完成未读，逐条打开或标为已读",
-            "en": "Filtered to unread finished tasks, opened one by one"
+            "zh": "只看已完成未读，逐条打开或标记",
+            "en": "Filtered to unread done, opened one by one"
           },
           {
             "src": "assets/shots/dsh-task-notifier/mobile.webp",
             "w": 390,
             "h": 844,
-            "zh": "窄屏自动收成单列，手机上也顺手",
-            "en": "Collapses to a single column on a phone"
+            "zh": "窄屏自动收成单列",
+            "en": "Collapses to a single column"
           },
           {
             "src": "assets/shots/dsh-task-notifier/panel-dark.webp",
             "w": 1400,
             "h": 875,
-            "zh": "跟随系统深色主题",
+            "zh": "深色主题跟随系统",
             "en": "Follows the system dark theme"
           }
         ]
@@ -173,25 +175,29 @@
         "zh": "打印工坊"
       },
       "description": {
-        "en": "Word-style A4 editor for handouts: compose on a real paper sheet with a formatting ribbon, review full-size pagination and layout guards, then print duplex on a LAN printer and get a delivery receipt.",
-        "zh": "Word 式 A4 讲义编辑器：在真实纸面上排版，Ribbon 工具栏调字体、对齐与分栏；按需全屏预览分页与纸张校验，再按打印机实测的双面能力出纸并回报回执。"
+        "en": "Lay out handouts on a real A4 sheet, with a ribbon for type, leading and columns. Preview pagination before printing, print duplex as the printer allows, and get a receipt.",
+        "zh": "在 A4 纸面上排讲义，Ribbon 调字体、行距和分栏。打印前全屏预览分页，按打印机能力双面出纸，打完给回执。"
       },
       "detail": {
         "license": "MIT",
         "features": {
           "zh": [
-            "在真实 A4 纸面上排版，看到的就是打出来的样子",
-            "Ribbon 工具栏调字体、字号、行距、边距与单双栏",
-            "全屏预览分页与纸张校验，打印前先把问题找出来",
-            "按打印机实测的双面能力出纸，并回报一张打印回执",
-            "中英双语，本地渲染与打印，不经过云端"
+            "在真实 A4 纸面上排版，所见即所印",
+            "Ribbon 工具栏调字体、字号、行距、边距",
+            "单栏双栏随时切换",
+            "打印前全屏预览分页与纸张校验",
+            "按打印机实际支持的能力双面出纸",
+            "打完给一张回执，知道哪份已出纸",
+            "本地渲染与打印，中英双语"
           ],
           "en": [
-            "Compose on a real A4 sheet, so what you see is what comes out of the printer",
-            "A formatting ribbon for font, size, leading, margins and one or two columns",
-            "Full-size preview of pagination and paper checks before you spend paper",
-            "Prints duplex according to what the printer actually supports, then reports a delivery receipt",
-            "Bilingual, rendered and printed locally, with no cloud in the loop"
+            "Compose on a real A4 sheet, so what you see is what prints",
+            "Ribbon toolbar for font, size, leading and margins",
+            "Switch between one and two columns",
+            "Full-size preview of pagination and paper checks",
+            "Duplex printing based on what the printer supports",
+            "A receipt after each job tells you what came out",
+            "Rendered and printed locally, bilingual"
           ]
         },
         "screenshots": [
@@ -199,15 +205,15 @@
             "src": "assets/shots/dsh-doc/workspace-zh.webp",
             "w": 1600,
             "h": 1000,
-            "zh": "中文工作区：上方工具栏，下方真实纸面",
-            "en": "Chinese workspace: ribbon above, real paper below"
+            "zh": "中文界面：Ribbon 在上，A4 纸面在下",
+            "en": "Chinese UI: ribbon above, A4 sheet below"
           },
           {
             "src": "assets/shots/dsh-doc/workspace-en.webp",
             "w": 1600,
             "h": 1000,
-            "zh": "英文界面的同一份讲义",
-            "en": "The same handout in the English interface"
+            "zh": "同一份讲义的英文界面",
+            "en": "The same handout in English"
           }
         ]
       }
@@ -239,29 +245,29 @@
         "zh": "待办与番茄钟"
       },
       "description": {
-        "en": "Todoist-style Today / Upcoming / Inbox / project views plus a TickTick-style pomodoro bound to tasks, with a sidebar entry, a live countdown on the sidebar row and an agent tool over the same task store.",
-        "zh": "Todoist 式的今天 / 即将到来 / 收件箱 / 项目视图，配 TickTick 式的任务番茄钟；侧边栏入口与秒级倒计时，智能体也通过同一个 `todo` 工具读写这份任务。"
+        "en": "Todoist-style Today, Upcoming, Inbox and project views, plus a pomodoro bound to tasks. A live countdown in the sidebar, and an agent that reads and writes the same task store.",
+        "zh": "今天、即将到来、收件箱、项目四种视图管待办，番茄钟绑在任务上。侧边栏秒级倒计时，智能体也读写同一份任务。"
       },
       "detail": {
         "license": "MIT",
         "features": {
           "zh": [
-            "今天、即将到来、收件箱、已完成与项目视图，逾期和今天分组显示",
-            "任务可设截止时间、优先级、标签、子任务与重复规则",
-            "番茄钟绑定任务，专注结束自动累计，休息在侧边栏带模式名显示",
-            "日历视图按月查看任务，点选日期查看当天安排",
-            "对话页输入框下方常驻计时条，不打开面板也能控制番茄钟",
-            "智能体通过 `todo` 工具读写同一份任务库",
-            "中英双语、深色模式，任务存本机 JSON"
+            "今天、即将到来、收件箱、项目四个视图",
+            "截止时间、优先级、标签、子任务、重复规则",
+            "日历视图按月看任务，点日期看当天",
+            "番茄钟绑任务，专注结束自动累计",
+            "侧边栏秒级倒计时，休息标出模式名",
+            "输入框下方常驻计时条，不开面板也能控",
+            "智能体用 todo 工具读写同一份任务"
           ],
           "en": [
-            "Today, Upcoming, Inbox, Completed and per-project views, with overdue and today grouped apart",
-            "Due date/time, priority, labels, subtasks and recurrence on every task",
-            "Pomodoro bound to a task; finished focuses count automatically and breaks show on the sidebar with their mode name",
-            "Calendar view for the month; click a day to see its tasks",
-            "A timer dock under the composer, so the pomodoro is controllable without opening the panel",
-            "An agent `todo` tool that reads and writes the same task store",
-            "Bilingual, dark-mode aware, tasks stored as local JSON"
+            "Today, Upcoming, Inbox and project views",
+            "Due dates, priorities, labels, subtasks and repeat rules",
+            "Calendar view for the month; click a day for its tasks",
+            "A pomodoro bound to a task, counted automatically when focus ends",
+            "Second-by-second countdown in the sidebar, breaks labelled with their mode",
+            "A timer bar under the composer, usable without opening the panel",
+            "An agent `todo` tool over the same task store"
           ]
         },
         "screenshots": [
@@ -269,29 +275,29 @@
             "src": "assets/shots/dsh-todo/panel.webp",
             "w": 1600,
             "h": 1000,
-            "zh": "今天视图：逾期与今天分组，带优先级和截止时间",
-            "en": "Today view: overdue and today grouped apart, with priority and due times"
+            "zh": "今天视图：逾期与今天分开，标出优先级",
+            "en": "Today view: overdue and today apart, with priorities"
           },
           {
             "src": "assets/shots/dsh-todo/pomodoro.webp",
             "w": 1600,
             "h": 1000,
-            "zh": "番茄钟：环形进度、绑定任务与近 7 天统计",
-            "en": "Pomodoro: ring progress, a bound task and a 7-day stats chart"
+            "zh": "番茄钟：环形进度、绑定任务、7 天统计",
+            "en": "Pomodoro: ring progress, a bound task, 7-day stats"
           },
           {
             "src": "assets/shots/dsh-todo/sidebar-break.webp",
             "w": 1600,
             "h": 1000,
-            "zh": "侧边栏倒计时：休息带模式名，蓝色和专注区分",
-            "en": "Sidebar countdown: breaks carry a mode label and are tinted blue"
+            "zh": "侧边栏倒计时：休息带模式名，蓝色区分",
+            "en": "Sidebar countdown: breaks labelled and tinted blue"
           },
           {
             "src": "assets/shots/dsh-todo/panel-en.webp",
             "w": 1600,
             "h": 1000,
-            "zh": "英文界面，所有文案随语言切换",
-            "en": "English interface; every string follows the app language"
+            "zh": "英文界面，文案随语言切换",
+            "en": "English UI; every string follows the app language"
           }
         ]
       }

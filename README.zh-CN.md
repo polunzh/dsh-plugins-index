@@ -24,9 +24,9 @@ https://dsh.127.dev/index.json
 
 | 插件 | 说明 | 最新版 |
 |---|---|---|
-| **任务通知台** · [`@polunzh/dsh-task-notifier`](https://www.npmjs.com/package/@polunzh/dsh-task-notifier) | 任务完成时响提示音并弹系统/浏览器通知；侧边栏「任务」面板可筛选已完成未读 / 运行中 / 已完成 / 全部，未读状态本地持久化。中英双语，纯本地不联网。[源码](https://github.com/polunzh/dsh-task-notifier) | 1.2.1（以 `index.json` 为准） |
-| **打印工坊** · [`@polunzh/dsh-doc`](https://www.npmjs.com/package/@polunzh/dsh-doc) | Word 式 A4 讲义编辑器：在真实纸面上排版，Ribbon 工具栏调字体、对齐与分栏；按需全屏预览分页与纸张校验，再按打印机实测的双面能力出纸并回报回执。中英双语，本地渲染打印。[源码](https://github.com/polunzh/dsh-doc) | 0.2.1（以 `index.json` 为准） |
-| **待办与番茄钟** · [`@polunzh/dsh-todo`](https://www.npmjs.com/package/@polunzh/dsh-todo) | Todoist 式的今天 / 即将到来 / 收件箱 / 项目视图，配 TickTick 式的任务番茄钟；侧边栏秒级倒计时，智能体通过 `todo` 工具读写同一份任务。中英双语，任务存本机 JSON。[源码](https://github.com/polunzh/dsh-todo) | 0.1.2（以 `index.json` 为准） |
+| **任务通知台** · [`@polunzh/dsh-task-notifier`](https://www.npmjs.com/package/@polunzh/dsh-task-notifier) | 任务跑完响一声，系统通知同时弹出；侧边栏面板把待回复、运行中、已完成未读分开，未读状态重启后还在。中英双语，纯本地不联网。[源码](https://github.com/polunzh/dsh-task-notifier) | 1.3.3（以 `index.json` 为准） |
+| **打印工坊** · [`@polunzh/dsh-doc`](https://www.npmjs.com/package/@polunzh/dsh-doc) | 在 A4 纸面上排讲义，Ribbon 调字体、行距和分栏；打印前全屏预览分页，按打印机能力双面出纸，打完给回执。中英双语，本地渲染与打印。[源码](https://github.com/polunzh/dsh-doc) | 0.2.2（以 `index.json` 为准） |
+| **待办与番茄钟** · [`@polunzh/dsh-todo`](https://www.npmjs.com/package/@polunzh/dsh-todo) | 今天、即将到来、收件箱、项目四种视图管待办，番茄钟绑在任务上；侧边栏秒级倒计时，智能体用 `todo` 工具读写同一份任务。中英双语，任务存本机 JSON。[源码](https://github.com/polunzh/dsh-todo) | 0.1.3（以 `index.json` 为准） |
 
 ## 怎么用
 
@@ -110,7 +110,7 @@ npm run check        # 校验 index.json，并确认 dist/index.html 与数据�
 `category` / `labels` / `sortKeys` 引用到的 id 必须先在 `metadata` 里声明；
 `title` 必须含 `en`；图标内联不超过 32 KiB。默认**不收录预发布版本**（如 npm 发布流程留下的 `0.0.0-stage`）。
 
-页面文案与链接在 `site.json` 里；分类筛选条会在出现第二个分类后自动显示。
+站点文案在 `site.json`，插件文案在 `plugins.json`；分类筛选条会在出现第二个分类后自动显示。
 
 ## License
 
