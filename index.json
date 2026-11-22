@@ -474,6 +474,39 @@
           "engines": {
             "dsh": ">=0.2.0"
           }
+        },
+        {
+          "version": "0.2.0",
+          "publishTimestamp": 1795337330,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0"
+          }
+        },
+        {
+          "version": "0.2.1",
+          "publishTimestamp": 1795340357,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0"
+          }
+        },
+        {
+          "version": "0.2.2",
+          "publishTimestamp": 1795340484,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0"
+          }
         }
       ]
     }
