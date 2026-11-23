@@ -540,6 +540,17 @@
           "engines": {
             "dsh": ">=0.2.0"
           }
+        },
+        {
+          "version": "0.2.6",
+          "publishTimestamp": 1795410288,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0"
+          }
         }
       ]
     }
