@@ -551,6 +551,61 @@
           "engines": {
             "dsh": ">=0.2.0"
           }
+        },
+        {
+          "version": "0.2.7",
+          "publishTimestamp": 1795507855,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0"
+          }
+        },
+        {
+          "version": "0.2.8",
+          "publishTimestamp": 1795511845,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0"
+          }
+        },
+        {
+          "version": "0.2.9",
+          "publishTimestamp": 1795512040,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0"
+          }
+        },
+        {
+          "version": "0.2.10",
+          "publishTimestamp": 1795513060,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0"
+          }
+        },
+        {
+          "version": "0.2.11",
+          "publishTimestamp": 1795514182,
+          "source": {
+            "type": "npm",
+            "registry": "https://registry.npmjs.org/"
+          },
+          "engines": {
+            "dsh": ">=0.2.0"
+          }
         }
       ]
     }
